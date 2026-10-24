@@ -1,0 +1,44 @@
+# ---------- Secretos (NUNCA subir) ----------
+.env
+.env.*
+!.env.ejemplo
+!.env.example
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ---------- Entornos virtuales ----------
+venv/
+.venv/
+env/
+ENV/
+
+# ---------- Bases de datos locales y registros ----------
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# ---------- Editores ----------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ---------- Sistema operativo ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- Otros ----------
+node_modules/
+*.zip
+*.bak
+*.tmp

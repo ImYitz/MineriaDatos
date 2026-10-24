@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi avatar</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+</head>
+<body>
+  <main class="contenedor">
+    <a href="index.html" class="volver">← Volver</a>
+    <h1>Mi avatar</h1>
+
+    <div id="avatar-vista" class="avatar-grande"></div>
+    <p class="saldo">🪙 <span id="saldo-monedas">0</span> monedas · Nivel <span id="saldo-nivel">1</span></p>
+
+    <div class="pestanas">
+      <button class="pestana activa" data-categoria="color">Colores</button>
+      <button class="pestana" data-categoria="ropa">Ropa</button>
+      <button class="pestana" data-categoria="accesorio">Accesorios</button>
+    </div>
+
+    <div id="lista-items"></div>
+
+    <p id="mensaje" class="mensaje-error"></p>
+    <button id="boton-guardar" class="boton">Guardar avatar</button>
+  </main>
+
+  <script src="js/api.js?v=5"></script>
+  <script src="js/avatar.js?v=5"></script>
+  <script src="js/personalizar.js?v=5"></script>
+</body>
+</html>

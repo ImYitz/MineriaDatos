@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi perfil</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+</head>
+<body>
+  <main class="contenedor">
+    <a href="index.html" class="volver">← Volver</a>
+    <h1>Mi perfil</h1>
+
+    <section class="panel-usuario">
+      <div class="fila-usuario">
+        <div class="identidad">
+          <div id="avatar-mini" class="avatar-mini"></div>
+          <strong id="nombre-usuario">...</strong>
+        </div>
+        <span class="etiqueta-nivel">Nivel <span id="nivel">1</span></span>
+      </div>
+      <div class="barra barra-xp"><div id="barra-xp" class="barra-relleno barra-relleno-xp"></div></div>
+      <small id="texto-xp"></small>
+    </section>
+
+    <ul class="datos-perfil">
+      <li><span>Correo</span> <strong id="dato-correo">-</strong></li>
+      <li><span>Miembro desde</span> <strong id="dato-fecha">-</strong></li>
+      <li><span>Lecciones completadas</span> <strong id="dato-lecciones">-</strong></li>
+      <li><span>XP total</span> <strong id="dato-xp">-</strong></li>
+      <li><span>Monedas</span> <strong id="dato-monedas">-</strong></li>
+      <li><span>Racha actual</span> <strong id="dato-racha">-</strong></li>
+      <li><span>Mejor racha</span> <strong id="dato-racha-maxima">-</strong></li>
+      <li><span>Logros obtenidos</span> <strong id="dato-logros">-</strong></li>
+    </ul>
+
+    <p id="mensaje-error" class="mensaje-error"></p>
+    <button id="boton-salir" class="boton boton-secundario">Cerrar sesión</button>
+  </main>
+
+  <script src="js/api.js?v=5"></script>
+  <script src="js/avatar.js?v=5"></script>
+  <script src="js/perfil.js?v=5"></script>
+</body>
+</html>

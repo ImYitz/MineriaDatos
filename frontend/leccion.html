@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lección</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+</head>
+<body>
+  <main class="contenedor">
+    <a href="index.html" class="volver">← Volver</a>
+    <h1 id="titulo-leccion">Cargando...</h1>
+
+    <!-- Zona donde se muestran los ejercicios -->
+    <div id="zona-ejercicio">
+      <div class="barra"><div id="barra-progreso" class="barra-relleno"></div></div>
+      <h2 id="enunciado"></h2>
+      <div id="opciones"></div>
+      <p id="retroalimentacion" class="retroalimentacion"></p>
+      <button id="boton-principal" class="boton" disabled>Comprobar</button>
+    </div>
+
+    <!-- Zona final: se muestra al terminar todos los ejercicios -->
+    <div id="zona-final" class="oculto">
+      <h2>¡Lección terminada!</h2>
+      <p id="resumen-final"></p>
+      <p id="resumen-xp" class="resumen-xp"></p>
+      <p id="mensaje-nivel" class="mensaje-nivel"></p>
+      <p id="resumen-monedas" class="resumen-monedas"></p>
+      <p id="resumen-racha" class="texto-suave"></p>
+      <div id="logros-nuevos"></div>
+      <a href="index.html" class="boton">Volver a las lecciones</a>
+    </div>
+  </main>
+
+  <script src="js/api.js?v=5"></script>
+  <script src="js/leccion.js?v=5"></script>
+</body>
+</html>

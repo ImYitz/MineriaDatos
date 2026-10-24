@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear cuenta</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+</head>
+<body>
+  <main class="contenedor contenedor-formulario">
+    <h1>Crear cuenta</h1>
+
+    <form id="formulario" class="formulario">
+      <label for="nombre_usuario">Nombre de usuario</label>
+      <input id="nombre_usuario" type="text" autocomplete="username" required
+             minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+"
+             title="Letras, números o guion bajo (3 a 30 caracteres)">
+
+      <label for="correo">Correo</label>
+      <input id="correo" type="email" autocomplete="email" required>
+
+      <label for="contrasena">Contraseña (mínimo 8 caracteres)</label>
+      <input id="contrasena" type="password" autocomplete="new-password" required minlength="8">
+
+      <label for="contrasena2">Repite la contraseña</label>
+      <input id="contrasena2" type="password" autocomplete="new-password" required minlength="8">
+
+      <p id="mensaje-error" class="mensaje-error"></p>
+      <button type="submit" id="boton-enviar" class="boton">Crear cuenta</button>
+    </form>
+
+    <p class="enlace-alterno">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+  </main>
+
+  <script src="js/api.js?v=5"></script>
+  <script src="js/registro.js?v=5"></script>
+</body>
+</html>

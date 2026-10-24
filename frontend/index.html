@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aprendizaje</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+</head>
+<body>
+  <main class="contenedor">
+    <nav class="navegacion">
+      <div class="enlaces">
+        <a href="perfil.html">Mi perfil</a>
+        <a href="logros.html">Logros</a>
+        <a href="avatar.html">Avatar</a>
+      </div>
+      <button id="boton-salir" class="enlace-boton">Cerrar sesión</button>
+    </nav>
+
+    <!-- Panel con el nivel y la XP del usuario -->
+    <section class="panel-usuario">
+      <div class="fila-usuario">
+        <div class="identidad">
+          <div id="avatar-mini" class="avatar-mini"></div>
+          <strong id="nombre-usuario">...</strong>
+        </div>
+        <span class="etiqueta-nivel">Nivel <span id="nivel">1</span></span>
+      </div>
+      <div class="barra barra-xp"><div id="barra-xp" class="barra-relleno barra-relleno-xp"></div></div>
+      <small id="texto-xp"></small>
+      <div class="fichas">
+        <span class="ficha" id="ficha-racha">🔥 Racha: 0 días</span>
+        <span class="ficha" id="ficha-monedas">🪙 0 monedas</span>
+      </div>
+    </section>
+
+    <h1 id="titulo-curso">Cargando...</h1>
+    <p id="descripcion-curso"></p>
+    <div id="lista-lecciones"></div>
+  </main>
+
+  <script src="js/api.js?v=5"></script>
+  <script src="js/avatar.js?v=5"></script>
+  <script src="js/inicio.js?v=5"></script>
+</body>
+</html>

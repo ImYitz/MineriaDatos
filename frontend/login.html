@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+</head>
+<body>
+  <main class="contenedor contenedor-formulario">
+    <h1>Iniciar sesión</h1>
+
+    <form id="formulario" class="formulario">
+      <label for="usuario_o_correo">Usuario o correo</label>
+      <input id="usuario_o_correo" type="text" autocomplete="username" required>
+
+      <label for="contrasena">Contraseña</label>
+      <input id="contrasena" type="password" autocomplete="current-password" required>
+
+      <p id="mensaje-error" class="mensaje-error"></p>
+      <button type="submit" id="boton-enviar" class="boton">Entrar</button>
+    </form>
+
+    <p class="enlace-alterno">¿No tienes cuenta? <a href="registro.html">Regístrate</a></p>
+  </main>
+
+  <script src="js/api.js?v=5"></script>
+  <script src="js/login.js?v=5"></script>
+</body>
+</html>
