@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+  <link rel="stylesheet" href="css/laboratorios.css?v=1">
+</head>
+<body>
+  <main class="contenedor contenedor-lab">
+    <a href="laboratorios.html" class="volver">← Laboratorios</a>
+    <h1 id="titulo-lab">Cargando...</h1>
+    <p id="instrucciones-lab" class="texto-suave"></p>
+
+    <!-- Aquí dibuja su contenido el laboratorio (js/labs/<codigo>.js) -->
+    <section id="zona-lab"></section>
+
+    <!-- Preguntas de comprobación (las corrige el servidor) -->
+    <section id="zona-preguntas">
+      <h2>Comprueba lo que observaste</h2>
+      <div id="lista-preguntas"></div>
+      <p id="mensaje-error" class="mensaje-error"></p>
+      <button id="boton-terminar" class="boton" disabled>Terminar laboratorio</button>
+    </section>
+
+    <!-- Resultado: se muestra al terminar -->
+    <section id="zona-final" class="oculto">
+      <h2>¡Laboratorio terminado!</h2>
+      <p id="resumen-final"></p>
+      <p id="resumen-xp" class="resumen-xp"></p>
+      <p id="mensaje-nivel" class="mensaje-nivel"></p>
+      <p id="resumen-monedas" class="resumen-monedas"></p>
+      <p id="resumen-racha" class="texto-suave"></p>
+      <div id="logros-nuevos"></div>
+      <a href="laboratorios.html" class="boton">Volver a los laboratorios</a>
+    </section>
+  </main>
+
+  <script src="js/api.js?v=5"></script>
+  <script src="js/labs/utilidades.js?v=1"></script>
+  <script src="js/labs/normalizacion.js?v=1"></script>
+  <script src="js/labs/imputacion.js?v=1"></script>
+  <script src="js/labs/kmeans.js?v=1"></script>
+  <script src="js/labs/knn.js?v=1"></script>
+  <script src="js/laboratorio.js?v=1"></script>
+</body>
+</html>

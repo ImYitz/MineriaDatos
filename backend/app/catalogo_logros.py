@@ -2,11 +2,16 @@
 #
 # Para agregar un logro nuevo basta con añadir una línea a esta lista y reiniciar
 # el servidor. Los tipos de condición que existen hoy son:
-#   "lecciones_completadas" -> cuántas lecciones DISTINTAS ha completado
-#   "leccion_perfecta"      -> cuántas veces ha terminado una lección sin errores
-#   "racha"                 -> días seguidos estudiando
-#   "nivel"                 -> nivel alcanzado
+#   "lecciones_completadas"    -> cuántas lecciones DISTINTAS ha completado
+#   "leccion_perfecta"         -> cuántas veces ha terminado una lección sin errores
+#   "laboratorios_completados" -> cuántos laboratorios DISTINTOS ha completado
+#   "laboratorio_perfecto"     -> cuántas veces ha respondido bien todo un laboratorio
+#   "racha"                    -> días seguidos estudiando
+#   "nivel"                    -> nivel alcanzado
 # (Si quieres un tipo nuevo, hay que añadirlo también en servicio_logros.py)
+#
+# Icono "matraz": para que se vea 🧪 añade  matraz: "🧪",  a ICONOS_LOGRO en frontend/js/api.js
+# (si no lo añades, se muestra el icono por defecto 🏅).
 from sqlalchemy.orm import Session
 from . import modelos
 
@@ -29,6 +34,16 @@ CATALOGO = [
     {"codigo": "racha_7", "nombre": "Semana completa",
      "descripcion": "Estudia 7 días seguidos", "icono": "calendario",
      "tipo_condicion": "racha", "valor_objetivo": 7, "recompensa_monedas": 40},
+    # ---- Laboratorios (Etapa 6) ----
+    {"codigo": "primer_laboratorio", "nombre": "Manos a la obra",
+     "descripcion": "Completa tu primer laboratorio", "icono": "matraz",
+     "tipo_condicion": "laboratorios_completados", "valor_objetivo": 1, "recompensa_monedas": 15},
+    {"codigo": "laboratorio_perfecto", "nombre": "Experimento perfecto",
+     "descripcion": "Responde bien todas las preguntas de un laboratorio", "icono": "diana",
+     "tipo_condicion": "laboratorio_perfecto", "valor_objetivo": 1, "recompensa_monedas": 20},
+    {"codigo": "todos_laboratorios", "nombre": "Científico de datos",
+     "descripcion": "Completa los 4 laboratorios distintos", "icono": "trofeo",
+     "tipo_condicion": "laboratorios_completados", "valor_objetivo": 4, "recompensa_monedas": 50},
 ]
 
 

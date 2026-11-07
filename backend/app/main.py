@@ -5,12 +5,13 @@ from fastapi.staticfiles import StaticFiles
 
 from .base_datos import Base, motor, SesionLocal
 from . import modelos          # importante: así SQLAlchemy conoce las tablas
+from . import modelos_laboratorios   # tabla de progreso en laboratorios (Etapa 6)
 from .catalogo_logros import asegurar_logros
 from .catalogo_items import asegurar_items
-from .rutas import contenido, progreso, autenticacion, logros, tienda, avatar
+from .rutas import contenido, progreso, autenticacion, logros, tienda, avatar, laboratorios
 
 # Crea las tablas que todavía no existan en MySQL
-# (en la Etapa 5 se crearán "items_avatar", "items_usuario" y "avatar_usuario")
+# (en la Etapa 6 se crea "progreso_laboratorios"; las demás ya existen y no se tocan)
 Base.metadata.create_all(bind=motor)
 
 # Carga (o actualiza) los catálogos de logros y de objetos del avatar
@@ -37,6 +38,7 @@ app.include_router(progreso.router)
 app.include_router(logros.router)
 app.include_router(tienda.router)
 app.include_router(avatar.router)
+app.include_router(laboratorios.router)
 
 # ...y al final el frontend (debe ir último porque "/" atrapa todo lo demás).
 CARPETA_FRONTEND = Path(__file__).resolve().parent.parent.parent / "frontend"

@@ -1,0 +1,88 @@
+/* Estilos de los laboratorios. Se cargan DESPUÉS de estilos.css y reutilizan su aspecto. */
+
+.contenedor-lab { max-width: 680px; }
+
+/* Lista de laboratorios */
+.tarjeta-lab { display: flex; gap: 14px; align-items: center; }
+.tarjeta-lab .icono-lab { font-size: 2.2rem; flex-shrink: 0; }
+.tarjeta-lab .cuerpo-lab { flex: 1; }
+
+/* Gráfico */
+.lab-lienzo {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: white;
+  border: 2px solid #e5e5e5;
+  border-radius: 16px;
+  touch-action: none;       /* para poder arrastrar con el dedo sin que se mueva la página */
+}
+
+/* Controles */
+.lab-controles { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin: 12px 0; }
+.lab-grupo { display: flex; flex-wrap: wrap; gap: 6px; }
+.lab-boton {
+  padding: 8px 14px;
+  border: 2px solid #e5e5e5;
+  background: white;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #3c3c3c;
+}
+.lab-boton:hover { background: #f0f8ff; }
+.lab-boton.activo { border-color: #1cb0f6; background: #ddf4ff; color: #1478b0; }
+.lab-boton.principal { background: #58cc02; border-color: #58cc02; color: white; }
+.lab-boton.principal:hover { background: #4fb802; }
+.lab-boton:disabled { background: #f1f1f1; color: #aaa; border-color: #e5e5e5; cursor: not-allowed; }
+.lab-boton:focus-visible, .lab-deslizador input:focus-visible, .opcion:focus-visible {
+  outline: 3px solid #1cb0f6;
+  outline-offset: 2px;
+}
+
+.lab-deslizador { display: flex; flex-direction: column; gap: 2px; font-weight: bold; font-size: 0.9rem; }
+.lab-deslizador input { width: 170px; accent-color: #1cb0f6; }
+
+/* Panel de información bajo el gráfico */
+.lab-info {
+  background: white;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 12px 0 20px;
+  font-size: 0.95rem;
+}
+.lab-info p { margin: 6px 0; }
+.lab-nota { color: #777; font-size: 0.85rem; }
+
+.lab-tabla-caja { overflow-x: auto; }
+.lab-tabla { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.lab-tabla th, .lab-tabla td { padding: 6px 8px; border-bottom: 1px solid #eee; text-align: right; white-space: nowrap; }
+.lab-tabla th:first-child, .lab-tabla td:first-child { text-align: left; }
+.lab-tabla th { color: #777; font-weight: bold; }
+
+/* Barra apilada (aporte de cada variable a la distancia) */
+.lab-apilada { display: flex; height: 14px; border-radius: 8px; overflow: hidden; background: #e5e5e5; margin: 6px 0; }
+.lab-apilada .parte-a { background: #1cb0f6; }
+.lab-apilada .parte-b { background: #ff9600; }
+
+/* Curva del codo */
+.lab-fila-barra { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; margin: 3px 0; }
+.lab-fila-barra .etiqueta { width: 36px; font-weight: bold; }
+.lab-fila-barra .pista { flex: 1; background: #eef1ee; border-radius: 6px; height: 12px; overflow: hidden; }
+.lab-fila-barra .relleno { background: #b9c4cf; height: 100%; }
+.lab-fila-barra.actual .relleno { background: #1cb0f6; }
+.lab-fila-barra.actual .etiqueta { color: #1478b0; }
+.lab-fila-barra .valor { width: 64px; text-align: right; color: #777; }
+
+/* Leyenda */
+.lab-leyenda { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.85rem; color: #555; margin: 6px 0; }
+.lab-leyenda .punto { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+
+/* Preguntas de comprobación */
+.pregunta-lab { margin-bottom: 22px; }
+.pregunta-lab h3 { margin: 0 0 10px; font-size: 1.05rem; }
+.nota-pregunta { margin: 6px 0 0; font-size: 0.9rem; font-weight: bold; min-height: 1.2em; }
+.nota-pregunta.bien { color: #58a700; }
+.nota-pregunta.mal { color: #ea2b2b; }
