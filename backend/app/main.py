@@ -8,16 +8,18 @@ from . import modelos          # importante: así SQLAlchemy conoce las tablas
 from . import modelos_laboratorios   # tabla de progreso en laboratorios (Etapa 6)
 from .catalogo_logros import asegurar_logros
 from .catalogo_items import asegurar_items
+from .catalogo_lecciones import asegurar_lecciones
 from .rutas import contenido, progreso, autenticacion, logros, tienda, avatar, laboratorios
 
 # Crea las tablas que todavía no existan en MySQL
 # (en la Etapa 6 se crea "progreso_laboratorios"; las demás ya existen y no se tocan)
 Base.metadata.create_all(bind=motor)
 
-# Carga (o actualiza) los catálogos de logros y de objetos del avatar
+# Carga (o actualiza) los catálogos de logros, objetos del avatar y lecciones
 with SesionLocal() as bd:
     asegurar_logros(bd)
     asegurar_items(bd)
+    asegurar_lecciones(bd)   # añade las lecciones nuevas sin borrar usuarios ni progreso
 
 app = FastAPI(title="Aprendizaje: Minería de datos")
 

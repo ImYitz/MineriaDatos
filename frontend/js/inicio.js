@@ -1,4 +1,20 @@
-// Página de inicio: muestra el nivel/XP del usuario y las lecciones del curso.
+// Página de inicio: muestra el nivel/XP del usuario y las lecciones del curso, agrupadas por unidad.
+
+// Unidades del curso. Cada una empieza en la lección cuyo "orden" es "desde" y llega hasta
+// la anterior a la siguiente unidad. Debe coincidir con backend/app/catalogo_lecciones.py.
+const UNIDADES = [
+  { desde: 1, titulo: "Unidad 1: Conceptos sobre minería de datos" },
+  { desde: 9, titulo: "Unidad 2: Modelos y técnicas de la minería de datos" },
+];
+
+// Devuelve la unidad a la que pertenece una lección según su orden
+function unidadDe(orden) {
+  let actual = null;
+  for (const unidad of UNIDADES) {
+    if (orden >= unidad.desde) actual = unidad;
+  }
+  return actual;
+}
 
 async function cargarPerfil() {
   const perfil = await pedirApi("/api/usuario/actual");
@@ -34,12 +50,40 @@ async function cargarCurso() {
       progresoPorLeccion[p.leccion_id] = p;
     }
 
+    // Cuántas lecciones tiene cada unidad y cuántas lleva completadas el usuario
+    const conteo = new Map();
+    for (const leccion of curso.lecciones) {
+      const unidad = unidadDe(leccion.orden);
+      if (!unidad) continue;
+      if (!conteo.has(unidad)) conteo.set(unidad, { total: 0, hechas: 0 });
+      const c = conteo.get(unidad);
+      c.total++;
+      if (progresoPorLeccion[leccion.id]) c.hechas++;
+    }
+
     // textContent escribe texto plano (más seguro que innerHTML)
     document.getElementById("titulo-curso").textContent = curso.titulo;
     document.getElementById("descripcion-curso").textContent = curso.descripcion;
 
     contenedor.innerHTML = "";
+    let unidadAnterior = null;
     for (const leccion of curso.lecciones) {
+      // Al empezar una unidad nueva se dibuja su banner
+      const unidad = unidadDe(leccion.orden);
+      if (unidad && unidad !== unidadAnterior) {
+        const banner = document.createElement("div");
+        banner.className = "banner-unidad" + (UNIDADES.indexOf(unidad) % 2 === 1 ? " alterna" : "");
+        const nombre = document.createElement("strong");
+        nombre.textContent = unidad.titulo;
+        const avance = document.createElement("small");
+        const c = conteo.get(unidad);
+        avance.textContent = c.hechas + " de " + c.total + " completadas";
+        banner.appendChild(nombre);
+        banner.appendChild(avance);
+        contenedor.appendChild(banner);
+        unidadAnterior = unidad;
+      }
+
       const tarjeta = document.createElement("a");
       tarjeta.className = "tarjeta-leccion";
       tarjeta.href = "leccion.html?id=" + leccion.id;
