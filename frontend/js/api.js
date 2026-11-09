@@ -70,6 +70,8 @@ const ICONOS_LOGRO = {
   trofeo: "🏆",
   fuego: "🔥",
   calendario: "📅",
+  matraz: "🧪",
+  codigo: "💻",
 };
 
 function iconoLogro(nombre) {

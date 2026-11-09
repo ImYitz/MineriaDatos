@@ -2,14 +2,15 @@
 #
 # Cómo funciona: cada logro del catálogo dice "tipo de condición + valor objetivo".
 # Aquí calculamos el valor ACTUAL del usuario para ese tipo y, si llega al
-# objetivo, el logro se desbloquea. Se revisa cada vez que se completa una lección
-# o un laboratorio.
+# objetivo, el logro se desbloquea. Se revisa cada vez que se completa una lección,
+# un laboratorio o una práctica de R.
 from typing import List
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from . import modelos, logica
 from .modelos_laboratorios import ProgresoLaboratorio
+from .modelos_r import ProgresoR
 
 
 def valor_actual(bd: Session, usuario: modelos.Usuario, tipo_condicion: str) -> int:
@@ -42,6 +43,18 @@ def valor_actual(bd: Session, usuario: modelos.Usuario, tipo_condicion: str) -> 
                 ProgresoLaboratorio.usuario_id == usuario.id,
                 ProgresoLaboratorio.puntaje == 100,
             )
+            .scalar()
+        ) or 0
+    if tipo_condicion == "lecciones_r_completadas":
+        return (
+            bd.query(func.count(func.distinct(ProgresoR.leccion)))
+            .filter(ProgresoR.usuario_id == usuario.id)
+            .scalar()
+        ) or 0
+    if tipo_condicion == "practica_r_perfecta":
+        return (
+            bd.query(func.count(ProgresoR.id))
+            .filter(ProgresoR.usuario_id == usuario.id, ProgresoR.puntaje == 100)
             .scalar()
         ) or 0
     if tipo_condicion == "racha":

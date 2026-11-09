@@ -1,0 +1,110 @@
+/* Estilos de la sección "Aprende R". Se cargan DESPUÉS de estilos.css y reutilizan su aspecto. */
+
+.contenedor-r { max-width: 720px; }
+
+/* Lista de lecciones de R */
+.tarjeta-r { display: flex; gap: 14px; align-items: center; }
+.tarjeta-r .icono-r { font-size: 2.2rem; flex-shrink: 0; }
+.tarjeta-r .cuerpo-r { flex: 1; }
+
+/* Aviso del estado de R (cargando / listo / error) */
+.estado-r {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  border-radius: 12px;
+  padding: 8px 14px;
+  margin: 12px 0 18px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  background: #fff4e0;
+  border: 2px solid #ffd9a0;
+  color: #8a5300;
+}
+.estado-r.listo { background: #f6fff0; border-color: #b7e88a; color: #3f7d00; }
+.estado-r.error { background: #ffdfe0; border-color: #ff9a9a; color: #b42318; }
+.estado-r button { padding: 4px 12px; border-radius: 10px; border: 2px solid currentColor; background: white; color: inherit; font-weight: bold; cursor: pointer; }
+
+/* Tarjetas de teoría y de práctica */
+.tarjeta-teoria, .tarjeta-tarea {
+  background: white;
+  border: 2px solid #e5e5e5;
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.tarjeta-teoria h3, .tarjeta-tarea h3 { margin: 0 0 8px; }
+.tarjeta-teoria p, .tarjeta-tarea p { margin: 8px 0; line-height: 1.5; }
+.tarjeta-tarea { border-color: #cfe3f5; }
+.tarjeta-tarea.hecha { border-color: #b7e88a; background: #fbfff8; }
+.tarjeta-tarea.fallida { border-color: #ff9a9a; }
+.contenedor-r code {
+  background: #eef1ee;
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.92em;
+}
+
+/* Editor y salida de código */
+.editor-r {
+  display: block;
+  width: 100%;
+  background: #f7f9fc;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-family: Consolas, Menlo, "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  tab-size: 2;
+  resize: vertical;
+  color: #2b2b2b;
+}
+.editor-r:focus { outline: none; border-color: #1cb0f6; }
+.controles-r { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.boton-r {
+  padding: 7px 14px;
+  border: 2px solid #e5e5e5;
+  background: white;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #3c3c3c;
+}
+.boton-r:hover { background: #f0f8ff; }
+.boton-r.ejecutar { background: #58cc02; border-color: #58cc02; color: white; }
+.boton-r.ejecutar:hover { background: #4fb802; }
+.boton-r:disabled { background: #f1f1f1; border-color: #e5e5e5; color: #aaa; cursor: not-allowed; }
+.boton-r:focus-visible, .estado-r button:focus-visible { outline: 3px solid #1cb0f6; outline-offset: 2px; }
+
+.salida-r {
+  margin: 8px 0 0;
+  background: #10151f;
+  color: #e6edf3;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-family: Consolas, Menlo, "Courier New", monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  max-height: 260px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.salida-r:empty { display: none; }
+.salida-r .error-r { color: #ff9a9a; }
+.salida-r .aviso-r { color: #ffd27a; }
+
+/* Lista de comprobaciones de una tarea */
+.checks-r { list-style: none; margin: 12px 0 0; padding: 0; }
+.checks-r li { padding: 6px 0; border-top: 1px solid #eee; font-size: 0.92rem; }
+.checks-r .marca { display: inline-block; width: 1.4em; font-weight: bold; }
+.checks-r li.ok { color: #3f7d00; }
+.checks-r li.mal { color: #b42318; }
+.checks-r .pista-r { display: block; margin-left: 1.4em; font-size: 0.85rem; color: #777; font-weight: normal; }
+
+.mensaje-practica { font-weight: bold; min-height: 1.4em; }
+.mensaje-practica.mal { color: #b42318; }

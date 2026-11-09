@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lección de R</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+  <link rel="stylesheet" href="css/aprende_r.css?v=1">
+</head>
+<body>
+  <main class="contenedor contenedor-r">
+    <a href="aprende_r.html" class="volver">← Aprende R</a>
+    <h1 id="titulo-r">Cargando...</h1>
+    <p id="descripcion-r" class="texto-suave"></p>
+
+    <!-- Estado del motor de R (se carga en tu navegador) -->
+    <div id="estado-r" class="estado-r"></div>
+
+    <!-- Teoría con ejemplos que se pueden ejecutar -->
+    <section id="zona-teoria"></section>
+
+    <!-- Práctica final: el código se ejecuta en el navegador y el servidor corrige los resultados -->
+    <section id="zona-practica" class="oculto">
+      <h2>Práctica final</h2>
+      <p id="intro-practica" class="texto-suave"></p>
+      <div id="lista-tareas"></div>
+      <p id="mensaje-practica" class="mensaje-practica"></p>
+      <p id="mensaje-error" class="mensaje-error"></p>
+      <button id="boton-comprobar" class="boton">Comprobar mi práctica</button>
+    </section>
+
+    <!-- Resultado: se muestra al aprobar -->
+    <section id="zona-final" class="oculto">
+      <h2>¡Práctica aprobada!</h2>
+      <p id="resumen-final"></p>
+      <p id="resumen-xp" class="resumen-xp"></p>
+      <p id="mensaje-nivel" class="mensaje-nivel"></p>
+      <p id="resumen-monedas" class="resumen-monedas"></p>
+      <p id="resumen-racha" class="texto-suave"></p>
+      <div id="logros-nuevos"></div>
+      <a href="aprende_r.html" class="boton">Volver a las lecciones de R</a>
+    </section>
+  </main>
+
+  <script src="js/api.js?v=6"></script>
+  <script src="js/r_motor.js?v=1"></script>
+  <script src="js/leccion_r.js?v=1"></script>
+</body>
+</html>

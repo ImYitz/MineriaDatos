@@ -6,12 +6,14 @@
 #   "leccion_perfecta"         -> cuántas veces ha terminado una lección sin errores
 #   "laboratorios_completados" -> cuántos laboratorios DISTINTOS ha completado
 #   "laboratorio_perfecto"     -> cuántas veces ha respondido bien todo un laboratorio
+#   "lecciones_r_completadas"  -> cuántas lecciones de R DISTINTAS ha aprobado
+#   "practica_r_perfecta"      -> cuántas veces ha aprobado una práctica de R sin fallos
 #   "racha"                    -> días seguidos estudiando
 #   "nivel"                    -> nivel alcanzado
 # (Si quieres un tipo nuevo, hay que añadirlo también en servicio_logros.py)
 #
-# Icono "matraz": para que se vea 🧪 añade  matraz: "🧪",  a ICONOS_LOGRO en frontend/js/api.js
-# (si no lo añades, se muestra el icono por defecto 🏅).
+# Los iconos "matraz" (🧪) y "codigo" (💻) están definidos en ICONOS_LOGRO en frontend/js/api.js
+# (si un icono no está allí, se muestra el icono por defecto 🏅).
 from sqlalchemy.orm import Session
 from . import modelos
 
@@ -51,6 +53,16 @@ CATALOGO = [
     {"codigo": "curso_completo", "nombre": "Curso completo",
      "descripcion": "Completa las 14 lecciones del curso", "icono": "trofeo",
      "tipo_condicion": "lecciones_completadas", "valor_objetivo": 14, "recompensa_monedas": 80},
+    # ---- Aprende R (Etapa 7) ----
+    {"codigo": "primera_practica_r", "nombre": "Primer script",
+     "descripcion": "Aprueba tu primera práctica de R", "icono": "codigo",
+     "tipo_condicion": "lecciones_r_completadas", "valor_objetivo": 1, "recompensa_monedas": 15},
+    {"codigo": "practica_r_perfecta", "nombre": "Código sin fallos",
+     "descripcion": "Aprueba una práctica de R con todas las comprobaciones correctas", "icono": "diana",
+     "tipo_condicion": "practica_r_perfecta", "valor_objetivo": 1, "recompensa_monedas": 20},
+    {"codigo": "todas_practicas_r", "nombre": "Programador de datos",
+     "descripcion": "Aprueba las 6 prácticas de R", "icono": "codigo",
+     "tipo_condicion": "lecciones_r_completadas", "valor_objetivo": 6, "recompensa_monedas": 60},
 ]
 
 
