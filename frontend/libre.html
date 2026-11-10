@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modo libre</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+  <link rel="stylesheet" href="css/laboratorios.css?v=1">
+  <link rel="stylesheet" href="css/libre.css?v=1">
+</head>
+<body>
+  <main class="contenedor contenedor-lab">
+    <a href="index.html" class="volver">← Volver</a>
+    <h1>📄 Modo libre</h1>
+
+    <!-- 1) Subir el PDF -->
+    <section id="zona-subida">
+      <p class="texto-suave">Sube un PDF con el tema que quieras estudiar y se generarán preguntas sobre su contenido. El PDF no se guarda; solo se guardan las preguntas.</p>
+      <div class="caja-subida">
+        <label for="archivo">Archivo PDF (máximo 10 MB)</label>
+        <input id="archivo" type="file" accept=".pdf,application/pdf">
+        <label for="cantidad">Número de preguntas</label>
+        <select id="cantidad">
+          <option value="5">5</option>
+          <option value="8" selected>8</option>
+          <option value="10">10</option>
+        </select>
+        <p id="estado-subida" class="texto-suave"></p>
+        <p id="error-subida" class="mensaje-error"></p>
+        <button id="boton-generar" class="boton" disabled>Generar preguntas</button>
+      </div>
+      <h2>Tus prácticas recientes</h2>
+      <div id="lista-historial"></div>
+    </section>
+
+    <!-- 2) Preguntas -->
+    <section id="zona-preguntas" class="oculto">
+      <h2 id="titulo-practica"></h2>
+      <p id="info-practica" class="texto-suave"></p>
+      <p id="aviso-recompensa" class="aviso-libre oculto"></p>
+      <div id="lista-preguntas"></div>
+      <p id="error-preguntas" class="mensaje-error"></p>
+      <button id="boton-terminar" class="boton" disabled>Terminar práctica</button>
+    </section>
+
+    <!-- 3) Resultado -->
+    <section id="zona-final" class="oculto">
+      <h2>¡Práctica terminada!</h2>
+      <p id="resumen-final"></p>
+      <p id="resumen-xp" class="resumen-xp"></p>
+      <p id="mensaje-nivel" class="mensaje-nivel"></p>
+      <p id="resumen-monedas" class="resumen-monedas"></p>
+      <p id="resumen-racha" class="texto-suave"></p>
+      <p id="motivo-sin-recompensa" class="aviso-libre oculto"></p>
+      <div id="logros-nuevos"></div>
+      <a href="libre.html" class="boton">Practicar con otro PDF</a>
+    </section>
+  </main>
+
+  <script src="js/api.js?v=7"></script>
+  <script src="js/libre.js?v=1"></script>
+</body>
+</html>

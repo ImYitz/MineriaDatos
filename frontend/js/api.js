@@ -31,7 +31,11 @@ function exigirSesion() {
 // "async/await" permite esperar la respuesta del servidor sin congelar la página.
 // Si hay token, se envía en la cabecera Authorization para que el servidor sepa quién eres.
 async function pedirApi(ruta, opciones = {}, redirigirSiNoAutorizado = true) {
-  const cabeceras = { "Content-Type": "application/json" };
+  const cabeceras = {};
+  // Con FormData (subida de archivos) el navegador pone solo el Content-Type correcto
+  if (!(opciones.body instanceof FormData)) {
+    cabeceras["Content-Type"] = "application/json";
+  }
   const token = obtenerToken();
   if (token) {
     cabeceras["Authorization"] = "Bearer " + token;

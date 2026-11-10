@@ -5,3 +5,6 @@ pymysql
 python-dotenv
 bcrypt
 PyJWT
+python-multipart
+pypdf
+anthropic
