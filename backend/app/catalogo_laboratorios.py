@@ -190,6 +190,60 @@ CATALOGO = [
             },
         ],
     },
+    {
+        "codigo": "arbol",
+        "titulo": "Árboles de clasificación",
+        "icono": "🌳",
+        "descripcion": "Cambia la profundidad del árbol y mira cómo aprende, cuándo se equivoca y cuándo memoriza.",
+        "xp_recompensa": 20,
+        "instrucciones": (
+            "Cada punto es un estudiante: nota del parcial y asistencia, con su resultado (aprueba o no "
+            "aprueba). El árbol se construye solo con los estudiantes de entrenamiento (círculos) y se "
+            "evalúa con los de prueba (cuadrados), que nunca vio. Mueve la profundidad máxima, cambia entre "
+            "Gini y entropía, y compara la exactitud de entrenamiento con la de prueba y la matriz de confusión."
+        ),
+        "preguntas": [
+            {
+                "enunciado": "¿Qué significa que un nodo tenga impureza (Gini) igual a 0?",
+                "opciones": [
+                    "Que está vacío y no se puede dividir",
+                    "Que todos los estudiantes del nodo son de la misma clase",
+                    "Que el nodo tiene la mitad de cada clase",
+                    "Que el nodo es la raíz del árbol",
+                ],
+                "respuesta_correcta": "Que todos los estudiantes del nodo son de la misma clase",
+                "explicacion": "La impureza mide qué tan mezcladas están las clases: 0 es un nodo puro y 0,5 (en Gini, con dos clases) es la mezcla máxima.",
+            },
+            {
+                "enunciado": "En este laboratorio, ¿con qué profundidad máxima es mayor la exactitud de prueba?",
+                "opciones": ["1", "3", "6", "8"],
+                "respuesta_correcta": "3",
+                "explicacion": "Con profundidad 3 la exactitud de prueba llega a su máximo (cerca del 97 %). Con 6 u 8 baja al 80 % aunque el entrenamiento suba.",
+            },
+            {
+                "enunciado": "¿Qué señal indica que un árbol sufre sobreajuste?",
+                "opciones": [
+                    "La exactitud de entrenamiento es muy alta y la de prueba es bastante menor",
+                    "La exactitud de prueba es mayor que la de entrenamiento",
+                    "El árbol tiene muy pocas hojas",
+                    "Las dos exactitudes son bajas",
+                ],
+                "respuesta_correcta": "La exactitud de entrenamiento es muy alta y la de prueba es bastante menor",
+                "explicacion": "El árbol memorizó hasta el ruido de los datos de entrenamiento y no generaliza a datos nuevos. Limitar la profundidad (poda) ayuda a evitarlo.",
+            },
+            {
+                "enunciado": "En la matriz de confusión de este laboratorio, ¿qué es un falso positivo?",
+                "opciones": [
+                    "El árbol predice «No aprueba» y el estudiante sí aprobó",
+                    "El árbol predice «Aprueba» y el estudiante no aprobó",
+                    "El árbol predice «Aprueba» y el estudiante aprobó",
+                    "El árbol no logra hacer ninguna predicción",
+                ],
+                "respuesta_correcta": "El árbol predice «Aprueba» y el estudiante no aprobó",
+                "explicacion": "Aquí «positivo» es aprobar: un falso positivo es una alarma falsa (predijo aprobar y no era así). Predecir «No aprueba» a quien sí aprobó es un falso negativo.",
+            },
+        ],
+    },
 ]
 
 

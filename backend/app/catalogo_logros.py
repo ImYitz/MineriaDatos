@@ -44,8 +44,8 @@ CATALOGO = [
      "descripcion": "Responde bien todas las preguntas de un laboratorio", "icono": "diana",
      "tipo_condicion": "laboratorio_perfecto", "valor_objetivo": 1, "recompensa_monedas": 20},
     {"codigo": "todos_laboratorios", "nombre": "Científico de datos",
-     "descripcion": "Completa los 4 laboratorios distintos", "icono": "trofeo",
-     "tipo_condicion": "laboratorios_completados", "valor_objetivo": 4, "recompensa_monedas": 50},
+     "descripcion": "Completa los 5 laboratorios distintos", "icono": "trofeo",
+     "tipo_condicion": "laboratorios_completados", "valor_objetivo": 5, "recompensa_monedas": 50},
     # ---- Avance en el curso ----
     {"codigo": "siete_lecciones", "nombre": "Mitad del camino",
      "descripcion": "Completa 7 lecciones distintas", "icono": "medalla",
