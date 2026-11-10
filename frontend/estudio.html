@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis datos de estudio</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+  <link rel="stylesheet" href="css/estudio.css?v=1">
+</head>
+<body>
+  <main class="contenedor contenedor-estudio">
+    <a href="index.html" class="volver">← Volver</a>
+    <h1>📊 Mis datos de estudio</h1>
+    <p class="texto-suave">Aquí la minería de datos se aplica a tu propio historial: un modelo estima tu riesgo de abandonar el estudio y el sistema te recomienda qué hacer ahora.</p>
+    <p id="mensaje-error" class="mensaje-error"></p>
+
+    <div id="contenido-estudio" class="oculto">
+      <!-- 1) Riesgo de abandono -->
+      <section class="tarjeta-estudio" id="tarjeta-riesgo">
+        <h2>Riesgo de abandono</h2>
+        <div class="fila-riesgo">
+          <span id="riesgo-nivel" class="etiqueta-riesgo"></span>
+          <strong id="riesgo-porcentaje" class="porcentaje-riesgo"></strong>
+        </div>
+        <div class="barra barra-riesgo"><div id="riesgo-barra" class="barra-relleno"></div></div>
+        <p id="riesgo-mensaje"></p>
+        <p id="riesgo-aviso" class="aviso-estudio oculto">Todavía tienes muy pocas actividades: con tan pocos datos la estimación es poco fiable. Mejorará a medida que estudies.</p>
+        <h3>¿Qué influye en tu resultado?</h3>
+        <ul id="lista-factores" class="lista-factores"></ul>
+      </section>
+
+      <!-- 2) Recomendación -->
+      <section class="tarjeta-estudio tarjeta-recomendacion" id="tarjeta-recomendacion">
+        <h2>Recomendación para ti</h2>
+        <h3 id="reco-titulo"></h3>
+        <p id="reco-texto"></p>
+        <a id="reco-enlace" class="boton" href="index.html"></a>
+        <p id="reco-relacionada" class="oculto"></p>
+      </section>
+
+      <!-- 3) Tus datos -->
+      <section class="tarjeta-estudio">
+        <h2>Tu actividad</h2>
+        <div id="kpis" class="kpis"></div>
+        <h3>Últimos 14 días</h3>
+        <div id="grafico-dias" class="grafico-dias"></div>
+        <h3>Por tipo de actividad</h3>
+        <div id="por-tipo" class="por-tipo"></div>
+      </section>
+
+      <section class="tarjeta-estudio">
+        <h2>Tu mejor puntaje por lección</h2>
+        <p class="texto-suave">Las lecciones por debajo del 70 % son las que más conviene repasar.</p>
+        <div id="grafico-lecciones"></div>
+      </section>
+
+      <!-- 4) Cómo se calculó -->
+      <section class="tarjeta-estudio">
+        <h2>¿Cómo se calculó? (el proceso de minería de datos)</h2>
+        <ol id="pasos-modelo" class="pasos-modelo"></ol>
+        <h3>Evaluación del modelo con datos de prueba</h3>
+        <div id="tabla-modelo" class="tabla-estudio-caja"></div>
+        <p class="aviso-estudio">Importante: con pocos usuarios reales no hay datos suficientes para entrenar un modelo de verdad, así que este se entrenó con estudiantes <strong>simulados</strong>. Es una demostración del proceso, no un diagnóstico.</p>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/api.js?v=7"></script>
+  <script src="js/estudio.js?v=1"></script>
+</body>
+</html>

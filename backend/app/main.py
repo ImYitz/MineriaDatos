@@ -11,7 +11,7 @@ from . import modelos_libre          # tabla de prácticas del modo libre (Etapa
 from .catalogo_logros import asegurar_logros
 from .catalogo_items import asegurar_items
 from .catalogo_lecciones import asegurar_lecciones
-from .rutas import contenido, progreso, autenticacion, logros, tienda, avatar, laboratorios, aprende_r, libre
+from .rutas import contenido, progreso, autenticacion, logros, tienda, avatar, laboratorios, aprende_r, libre, estudio
 
 # Crea las tablas que todavía no existan en MySQL
 # (en las Etapas 6, 7 y 8 se crean "progreso_laboratorios", "progreso_r" y "sesiones_libres"; las demás ya existen y no se tocan)
@@ -45,6 +45,7 @@ app.include_router(avatar.router)
 app.include_router(laboratorios.router)
 app.include_router(aprende_r.router)
 app.include_router(libre.router)
+app.include_router(estudio.router)   # panel "Mis datos de estudio" (Etapa 9)
 
 # ...y al final el frontend (debe ir último porque "/" atrapa todo lo demás).
 CARPETA_FRONTEND = Path(__file__).resolve().parent.parent.parent / "frontend"
