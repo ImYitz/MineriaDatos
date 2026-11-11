@@ -48,6 +48,8 @@ class PuntajeLeccion(BaseModel):
 
 class MetricasModelo(BaseModel):
     algoritmo: str
+    origen: str               # "base_datos" (entrenado con la base de datos) o "memoria" (estudiantes simulados en memoria)
+    simulados: int            # cuántos de los estudiantes usados para entrenar son simulados (sim_...)
     datos_entrenamiento: int
     datos_prueba: int
     exactitud: int
@@ -55,6 +57,41 @@ class MetricasModelo(BaseModel):
     sensibilidad: int
     exactitud_base: int
     matriz: List[List[int]]   # [real][predicho]; 0 = continúa, 1 = abandona
+
+
+class SiluetaK(BaseModel):
+    k: int
+    silueta: float
+
+
+class GrupoEstudio(BaseModel):
+    id: int
+    nombre: str
+    descripcion: str
+    tamano: int
+    porcentaje: int
+    dias_activos_14: float     # promedio de días con estudio en los últimos 14
+    dias_sin_estudiar: float
+    puntaje_medio: int
+    variedad: float
+
+
+class PuntoGrupo(BaseModel):
+    x: float                   # días con estudio en los últimos 14
+    y: float                   # puntaje medio
+    grupo: int
+
+
+class Segmentacion(BaseModel):
+    k: int
+    silueta: float
+    siluetas: List[SiluetaK]
+    grupos: List[GrupoEstudio]
+    puntos: List[PuntoGrupo]
+    total: int                 # estudiantes agrupados
+    simulados: int             # cuántos son simulados
+    mi_grupo: Optional[int] = None
+    mi_punto: Optional[PuntoGrupo] = None
 
 
 class ResumenEstudio(BaseModel):
@@ -68,3 +105,4 @@ class ResumenEstudio(BaseModel):
     riesgo: RiesgoAbandono
     recomendacion: Recomendacion
     modelo: MetricasModelo
+    segmentacion: Optional[Segmentacion] = None

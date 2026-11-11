@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mis datos de estudio</title>
   <link rel="stylesheet" href="css/estilos.css?v=5">
-  <link rel="stylesheet" href="css/estudio.css?v=1">
+  <link rel="stylesheet" href="css/estudio.css?v=2">
 </head>
 <body>
   <main class="contenedor contenedor-estudio">
@@ -38,7 +38,20 @@
         <p id="reco-relacionada" class="oculto"></p>
       </section>
 
-      <!-- 3) Tus datos -->
+      <!-- 3) Perfil de estudiante (segmentación con K-means) -->
+      <section class="tarjeta-estudio" id="tarjeta-segmentos">
+        <h2>Tu perfil de estudiante</h2>
+        <p id="seg-estado" class="texto-suave oculto"></p>
+        <div id="seg-contenido" class="oculto">
+          <p id="seg-mi-grupo" class="seg-mi-grupo"></p>
+          <canvas id="seg-lienzo" class="seg-lienzo" width="600" height="320" aria-label="Gráfico de los grupos de estudiantes"></canvas>
+          <div id="seg-leyenda" class="seg-leyenda"></div>
+          <div id="seg-tabla" class="tabla-estudio-caja"></div>
+          <p id="seg-metodo" class="texto-suave"></p>
+        </div>
+      </section>
+
+      <!-- 4) Tus datos -->
       <section class="tarjeta-estudio">
         <h2>Tu actividad</h2>
         <div id="kpis" class="kpis"></div>
@@ -54,18 +67,18 @@
         <div id="grafico-lecciones"></div>
       </section>
 
-      <!-- 4) Cómo se calculó -->
+      <!-- 5) Cómo se calculó -->
       <section class="tarjeta-estudio">
         <h2>¿Cómo se calculó? (el proceso de minería de datos)</h2>
         <ol id="pasos-modelo" class="pasos-modelo"></ol>
         <h3>Evaluación del modelo con datos de prueba</h3>
         <div id="tabla-modelo" class="tabla-estudio-caja"></div>
-        <p class="aviso-estudio">Importante: con pocos usuarios reales no hay datos suficientes para entrenar un modelo de verdad, así que este se entrenó con estudiantes <strong>simulados</strong>. Es una demostración del proceso, no un diagnóstico.</p>
+        <p id="aviso-modelo" class="aviso-estudio"></p>
       </section>
     </div>
   </main>
 
   <script src="js/api.js?v=7"></script>
-  <script src="js/estudio.js?v=1"></script>
+  <script src="js/estudio.js?v=2"></script>
 </body>
 </html>

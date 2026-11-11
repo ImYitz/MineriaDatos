@@ -3,19 +3,18 @@
 # Pasos (CRISP-DM): 1) reunir los datos (lecciones, laboratorios, prácticas de R y modo libre),
 # 2) convertirlos en variables, 3) estimar el riesgo de abandono con el modelo de
 # modelo_abandono.py y 4) recomendar qué estudiar según los resultados.
-from dataclasses import dataclass
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from typing import Dict, List, Optional
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from . import modelos, logica, esquemas_estudio as esq
+from . import modelos, logica, esquemas_estudio as esq, segmentacion as seg
 from .catalogo_laboratorios import CATALOGO as LABORATORIOS
 from .catalogo_r import CATALOGO as LECCIONES_R
-from .modelo_abandono import CARACTERISTICAS, obtener_modelo
+from .datos_estudio import CARACTERISTICAS, _promedio, calcular_caracteristicas, obtener_eventos
+from .modelo_abandono import obtener_modelo
 from .modelos_laboratorios import ProgresoLaboratorio
-from .modelos_libre import SesionLibre
 from .modelos_r import ProgresoR
 
 PUNTAJE_ACEPTABLE = 70        # por debajo de esto, la lección se recomienda repasar
@@ -33,82 +32,6 @@ RELACIONADAS = {
     "Técnicas principales": [("laboratorio", "knn"), ("laboratorio", "kmeans")],
     "Árboles de clasificación": [("laboratorio", "arbol")],
 }
-
-
-@dataclass
-class Evento:
-    instante: datetime
-    puntaje: int
-    tipo: str
-
-    @property
-    def fecha(self) -> date:
-        return self.instante.date()
-
-
-# ---------------------------------------------------------------------------------------------
-# 1) Datos
-# ---------------------------------------------------------------------------------------------
-def obtener_eventos(bd: Session, usuario: modelos.Usuario) -> List[Evento]:
-    """Todas las actividades terminadas por el usuario, de la más antigua a la más reciente."""
-    eventos: List[Evento] = []
-
-    def agregar(filas, tipo: str) -> None:
-        for instante, puntaje in filas:
-            if instante is not None and puntaje is not None:
-                eventos.append(Evento(instante, int(puntaje), tipo))
-
-    agregar(
-        bd.query(modelos.ProgresoLeccion.fecha_completada, modelos.ProgresoLeccion.puntaje)
-        .filter(modelos.ProgresoLeccion.usuario_id == usuario.id), "lecciones")
-    agregar(
-        bd.query(ProgresoLaboratorio.fecha_completada, ProgresoLaboratorio.puntaje)
-        .filter(ProgresoLaboratorio.usuario_id == usuario.id), "laboratorios")
-    agregar(
-        bd.query(ProgresoR.fecha_completada, ProgresoR.puntaje)
-        .filter(ProgresoR.usuario_id == usuario.id), "r")
-    agregar(
-        bd.query(SesionLibre.fecha_completada, SesionLibre.puntaje)
-        .filter(SesionLibre.usuario_id == usuario.id, SesionLibre.completada.is_(True)), "libre")
-
-    eventos.sort(key=lambda e: e.instante)
-    return eventos
-
-
-# ---------------------------------------------------------------------------------------------
-# 2) Variables
-# ---------------------------------------------------------------------------------------------
-def _promedio(valores: List[float]) -> float:
-    return sum(valores) / len(valores)
-
-
-def calcular_caracteristicas(eventos: List[Evento], usuario: modelos.Usuario, hoy: date) -> Dict[str, float]:
-    if eventos:
-        dias_sin = (hoy - eventos[-1].fecha).days
-    else:
-        dias_sin = (hoy - usuario.fecha_registro.date()).days   # nunca ha estudiado: cuenta desde que se registró
-    dias_sin = max(0, min(30, dias_sin))
-
-    ventana = {hoy - timedelta(days=i) for i in range(14)}
-    dias_activos_14 = len({e.fecha for e in eventos if e.fecha in ventana})
-
-    puntajes = [e.puntaje for e in eventos]
-    puntaje_medio = _promedio(puntajes[-10:]) if puntajes else 50.0
-
-    tendencia = 0.0
-    if len(puntajes) >= 4:
-        recientes = puntajes[-3:]
-        anteriores = puntajes[-10:-3]
-        tendencia = max(-50.0, min(50.0, _promedio(recientes) - _promedio(anteriores)))
-
-    return {
-        "dias_sin_estudiar": float(dias_sin),
-        "actividad_14": dias_activos_14 / 14,
-        "puntaje_medio": puntaje_medio,
-        "tendencia": tendencia,
-        "variedad": float(len({e.tipo for e in eventos})),
-        "racha": float(min(14, logica.racha_vigente(usuario, hoy))),
-    }
 
 
 # ---------------------------------------------------------------------------------------------
@@ -154,8 +77,7 @@ MENSAJES = {
 }
 
 
-def evaluar_riesgo(caracteristicas: Dict[str, float], n_eventos: int) -> esq.RiesgoAbandono:
-    modelo = obtener_modelo()
+def evaluar_riesgo(caracteristicas: Dict[str, float], n_eventos: int, modelo) -> esq.RiesgoAbandono:
     x = [caracteristicas[nombre] for nombre in CARACTERISTICAS]
     probabilidad = modelo.probabilidad(x)
     contribuciones = modelo.contribuciones(x)
@@ -263,7 +185,7 @@ def recomendar(bd: Session, usuario: modelos.Usuario, puntajes: List[esq.Puntaje
 def resumen(bd: Session, usuario: modelos.Usuario) -> esq.ResumenEstudio:
     hoy = logica.fecha_hoy()
     eventos = obtener_eventos(bd, usuario)
-    caracteristicas = calcular_caracteristicas(eventos, usuario, hoy)
+    caracteristicas = calcular_caracteristicas(eventos, usuario.fecha_registro.date(), hoy)
 
     por_tipo = {tipo: 0 for tipo in TIPOS}
     for e in eventos:
@@ -295,6 +217,7 @@ def resumen(bd: Session, usuario: modelos.Usuario) -> esq.ResumenEstudio:
             orden=leccion.orden, titulo=leccion.titulo, mejor_puntaje=mejor, veces=veces))
         ids[leccion.orden] = leccion.id
 
+    modelo = obtener_modelo(bd)
     return esq.ResumenEstudio(
         total_actividades=len(eventos),
         dias_activos=len({e.fecha for e in eventos}),
@@ -303,7 +226,8 @@ def resumen(bd: Session, usuario: modelos.Usuario) -> esq.ResumenEstudio:
         por_tipo=por_tipo,
         actividad_14=actividad_14,
         puntajes_lecciones=puntajes,
-        riesgo=evaluar_riesgo(caracteristicas, len(eventos)),
+        riesgo=evaluar_riesgo(caracteristicas, len(eventos), modelo),
         recomendacion=recomendar(bd, usuario, puntajes, ids),
-        modelo=esq.MetricasModelo(**obtener_modelo().metricas),
+        modelo=esq.MetricasModelo(**modelo.metricas),
+        segmentacion=seg.resumen_segmentos(bd, hoy, caracteristicas, len(eventos)),
     )

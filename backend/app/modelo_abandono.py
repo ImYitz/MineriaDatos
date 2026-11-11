@@ -1,34 +1,35 @@
 # Modelo de riesgo de abandono (Etapa 9): regresión logística escrita a mano, sin librerías externas.
 #
 # Idea: a partir de cómo estudia una persona (días sin estudiar, constancia, puntajes...) estimar la
-# probabilidad de que deje de estudiar. Es un problema de CLASIFICACIÓN (abandona / continúa).
+# probabilidad de que NO vuelva a estudiar en los próximos 14 días. Es un problema de CLASIFICACIÓN.
 #
-# IMPORTANTE (honestidad de los datos): con pocos usuarios reales no hay datos suficientes para
-# entrenar un modelo de verdad. Por eso el modelo se entrena con estudiantes SIMULADOS, generados
-# con una semilla fija (siempre salen los mismos). Es una demostración del proceso de minería de
-# datos, no un diagnóstico real. Cuando haya muchos usuarios reales, basta con reemplazar
-# generar_estudiantes() por una consulta a la base de datos con el mismo formato.
+# De dónde salen los datos de entrenamiento:
+#   1. De la base de datos (datos_estudio.construir_dataset), si hay suficientes estudiantes.
+#      Con sembrar_estudiantes.py se crean estudiantes SIMULADOS (sim_001, sim_002...) para tener
+#      una base sólida con la que practicar.
+#   2. Si hay pocos, se usan estudiantes simulados EN MEMORIA (generar_estudiantes), siempre iguales.
+# En ambos casos, si los datos son simulados, el modelo demuestra el PROCESO de minería de datos,
+# no es un diagnóstico real. El panel lo avisa.
 #
 # Proceso (mismo orden que CRISP-DM): datos -> preparación (estandarizar) -> modelo -> evaluación.
 import math
 import random
+import time
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
-# Variables que usa el modelo (el orden importa; coincide con servicio_estudio.py)
-CARACTERISTICAS = [
-    "dias_sin_estudiar",   # días desde la última actividad (0 a 30)
-    "actividad_14",        # fracción de los últimos 14 días en que estudió (0 a 1)
-    "puntaje_medio",       # promedio de los últimos resultados (0 a 100)
-    "tendencia",           # últimos resultados menos los anteriores (-50 a 50)
-    "variedad",            # tipos de actividad distintos usados (0 a 4)
-    "racha",               # días seguidos estudiando (0 a 14)
-]
+from . import logica
+from .datos_estudio import CARACTERISTICAS, construir_dataset
 
-CANTIDAD_ENTRENAMIENTO = 500
+CANTIDAD_ENTRENAMIENTO = 500     # estudiantes simulados en memoria (plan B)
 CANTIDAD_PRUEBA = 200
 SEMILLA = 2026
+MINIMO_ESTUDIANTES = 40          # con menos estudiantes en la base, se usa el plan B
+MINIMO_POR_CLASE = 5             # y debe haber al menos 5 que abandonaron y 5 que continuaron
+SEGUNDOS_EN_MEMORIA = 300        # el modelo se vuelve a entrenar como máximo cada 5 minutos
+
+_memoria: Dict = {"modelo": None, "hasta": 0.0}
 
 
 def _limitar(valor: float, minimo: float, maximo: float) -> float:
@@ -41,7 +42,7 @@ def _sigmoide(z: float) -> float:
 
 
 def generar_estudiantes(cantidad: int, azar: random.Random) -> List[Tuple[List[float], int]]:
-    """Estudiantes simulados: (variables, abandona) con abandona = 1 si deja de estudiar.
+    """Estudiantes simulados en memoria: (variables, abandona) con abandona = 1 si deja de estudiar.
 
     Cada estudiante tiene un "compromiso" oculto g (positivo = muy comprometido). Las variables son
     observaciones ruidosas de g, y el abandono depende de g más algo de azar. Así el modelo tiene
@@ -103,19 +104,13 @@ def _porcentaje(parte: int, total: int) -> int:
     return int(round(100 * parte / total)) if total else 0
 
 
-@lru_cache(maxsize=1)
-def obtener_modelo() -> Modelo:
-    """Entrena el modelo la primera vez que se pide (tarda menos de un segundo) y lo guarda en memoria."""
-    azar = random.Random(SEMILLA)
-    entrenamiento = generar_estudiantes(CANTIDAD_ENTRENAMIENTO, azar)
-    prueba = generar_estudiantes(CANTIDAD_PRUEBA, azar)
-
+def _entrenar_y_evaluar(entrenamiento: List[Tuple[List[float], int]], prueba: List[Tuple[List[float], int]],
+                        origen: str, simulados: int) -> Modelo:
+    """Prepara los datos, entrena el modelo y lo evalúa con estudiantes que no vio al entrenar."""
     k = len(CARACTERISTICAS)
-    medias = [sum(f[0][j] for f in entrenamiento) / len(entrenamiento) for j in range(k)]
-    desvios = [
-        math.sqrt(sum((f[0][j] - medias[j]) ** 2 for f in entrenamiento) / len(entrenamiento)) or 1.0
-        for j in range(k)
-    ]
+    n = len(entrenamiento)
+    medias = [sum(f[0][j] for f in entrenamiento) / n for j in range(k)]
+    desvios = [math.sqrt(sum((f[0][j] - medias[j]) ** 2 for f in entrenamiento) / n) or 1.0 for j in range(k)]
 
     def estandar(x):
         return [(v - m) / d for v, m, d in zip(x, medias, desvios)]
@@ -123,22 +118,54 @@ def obtener_modelo() -> Modelo:
     pesos, sesgo = _entrenar([estandar(f[0]) for f in entrenamiento], [f[1] for f in entrenamiento])
     modelo = Modelo(medias, desvios, pesos, sesgo, {})
 
-    # Evaluación con estudiantes que el modelo nunca vio. Positivo = "abandona".
-    matriz = [[0, 0], [0, 0]]    # matriz[real][predicho]: 0 = continúa, 1 = abandona
+    # Positivo = "abandona". matriz[real][predicho]: 0 = continúa, 1 = abandona
+    matriz = [[0, 0], [0, 0]]
     for x, real in prueba:
-        predicho = 1 if modelo.probabilidad(x) >= 0.5 else 0
-        matriz[real][predicho] += 1
+        matriz[real][1 if modelo.probabilidad(x) >= 0.5 else 0] += 1
     vn, fp, fn, vp = matriz[0][0], matriz[0][1], matriz[1][0], matriz[1][1]
     total = len(prueba)
-    mayoritaria = max(vn + fp, fn + vp)
     modelo.metricas = {
         "algoritmo": "Regresión logística",
-        "datos_entrenamiento": len(entrenamiento),
+        "origen": origen,                      # "base_datos" o "memoria"
+        "simulados": simulados,                # cuántos de los estudiantes usados son simulados
+        "datos_entrenamiento": n,
         "datos_prueba": total,
         "exactitud": _porcentaje(vn + vp, total),
         "precision": _porcentaje(vp, vp + fp),
         "sensibilidad": _porcentaje(vp, vp + fn),
-        "exactitud_base": _porcentaje(mayoritaria, total),
+        "exactitud_base": _porcentaje(max(vn + fp, fn + vp), total),
         "matriz": matriz,
     }
+    return modelo
+
+
+@lru_cache(maxsize=1)
+def _modelo_en_memoria() -> Modelo:
+    azar = random.Random(SEMILLA)
+    entrenamiento = generar_estudiantes(CANTIDAD_ENTRENAMIENTO, azar)
+    prueba = generar_estudiantes(CANTIDAD_PRUEBA, azar)
+    return _entrenar_y_evaluar(entrenamiento, prueba, "memoria", CANTIDAD_ENTRENAMIENTO + CANTIDAD_PRUEBA)
+
+
+def _desde_base_datos(bd) -> Optional[Modelo]:
+    filas = construir_dataset(bd, logica.fecha_hoy())
+    abandonan = sum(f[1] for f in filas)
+    if len(filas) < MINIMO_ESTUDIANTES or min(abandonan, len(filas) - abandonan) < MINIMO_POR_CLASE:
+        return None
+    random.Random(SEMILLA).shuffle(filas)
+    corte = int(len(filas) * 0.7)       # 70 % para entrenar y 30 % para evaluar
+    ejemplos = [(f[0], f[1]) for f in filas]
+    return _entrenar_y_evaluar(ejemplos[:corte], ejemplos[corte:], "base_datos", sum(1 for f in filas if f[2]))
+
+
+def obtener_modelo(bd=None) -> Modelo:
+    """El modelo de riesgo. Si hay suficientes estudiantes en la base de datos se entrena con ellos;
+    si no, con estudiantes simulados en memoria. Se guarda unos minutos para no reentrenar en cada visita."""
+    if _memoria["modelo"] is not None and time.time() < _memoria["hasta"]:
+        return _memoria["modelo"]
+    modelo = _desde_base_datos(bd) if bd is not None else None
+    if modelo is None:
+        modelo = _modelo_en_memoria()
+    _memoria["modelo"] = modelo
+    _memoria["hasta"] = time.time() + SEGUNDOS_EN_MEMORIA
     return modelo

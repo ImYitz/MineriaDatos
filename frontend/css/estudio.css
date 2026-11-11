@@ -81,3 +81,10 @@
 .tabla-estudio th, .tabla-estudio td { padding: 6px 8px; border-bottom: 1px solid #eee; text-align: right; }
 .tabla-estudio th:first-child, .tabla-estudio td:first-child { text-align: left; }
 .tabla-estudio th { color: #777; font-weight: bold; }
+
+/* Perfil de estudiante (segmentación) */
+.seg-mi-grupo { font-size: 1.05rem; margin: 0 0 10px; }
+.seg-lienzo { display: block; width: 100%; height: auto; background: white; border: 2px solid #e5e5e5; border-radius: 12px; }
+.seg-leyenda { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.85rem; color: #555; margin: 8px 0; }
+.seg-leyenda .punto { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+.tabla-estudio tr.mi-grupo td { background: #f7fbff; font-weight: bold; }
