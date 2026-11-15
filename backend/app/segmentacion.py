@@ -192,3 +192,12 @@ def resumen_segmentos(bd: Session, hoy, caracteristicas: Dict[str, float],
         k=datos["k"], silueta=datos["silueta"], siluetas=datos["siluetas"], grupos=datos["grupos"],
         puntos=datos["puntos"], total=datos["total"], simulados=datos["simulados"],
         mi_grupo=mi_grupo, mi_punto=mi_punto)
+
+
+def grupo_del_usuario(bd: Session, hoy, caracteristicas: Dict[str, float],
+                      n_eventos: int) -> Optional[esq.GrupoEstudio]:
+    """Solo el grupo al que pertenece el usuario (para la pantalla de inicio). None si no se puede ubicar."""
+    resultado = resumen_segmentos(bd, hoy, caracteristicas, n_eventos)
+    if resultado is None or resultado.mi_grupo is None:
+        return None
+    return next((g for g in resultado.grupos if g.id == resultado.mi_grupo), None)

@@ -6,6 +6,7 @@
   <title>Aprendizaje</title>
   <link rel="stylesheet" href="css/estilos.css?v=5">
   <link rel="stylesheet" href="css/unidades.css?v=2">
+  <link rel="stylesheet" href="css/recomendacion.css?v=1">
 </head>
 <body>
   <main class="contenedor">
@@ -39,6 +40,28 @@
       </div>
     </section>
 
+    <!-- Recomendación según la clasificación del usuario (riesgo de abandono y perfil de estudio) -->
+    <section id="tarjeta-reco" class="tarjeta-reco oculto" aria-live="polite">
+      <div class="reco-cabecera">
+        <h2>💡 Recomendado para ti</h2>
+        <span id="reco-chip-riesgo" class="chip-riesgo"></span>
+      </div>
+      <p id="reco-perfil" class="reco-perfil"></p>
+      <p id="reco-consejo" class="reco-consejo"></p>
+      <div class="reco-principal">
+        <h3 id="reco-titulo"></h3>
+        <p id="reco-texto"></p>
+        <a id="reco-boton" class="boton" href="#"></a>
+        <p id="reco-relacionada" class="reco-relacionada oculto"></p>
+      </div>
+      <div id="reco-extra" class="reco-extra oculto">
+        <strong id="reco-extra-titulo"></strong>
+        <span id="reco-extra-texto"></span>
+        <a id="reco-extra-enlace" href="#"></a>
+      </div>
+      <a class="reco-mas" href="estudio.html">Ver mis datos de estudio →</a>
+    </section>
+
     <h1 id="titulo-curso">Cargando...</h1>
     <p id="descripcion-curso"></p>
     <div id="lista-lecciones"></div>
@@ -47,5 +70,6 @@
   <script src="js/api.js?v=7"></script>
   <script src="js/avatar.js?v=5"></script>
   <script src="js/inicio.js?v=6"></script>
+  <script src="js/recomendacion.js?v=1"></script>
 </body>
 </html>

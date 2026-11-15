@@ -1,4 +1,4 @@
-# Ruta del panel "Mis datos de estudio": análisis del historial del usuario con minería de datos.
+# Rutas del panel "Mis datos de estudio" y de la recomendación de la pantalla de inicio.
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -14,5 +14,14 @@ def ver_estudio(
     bd: Session = Depends(obtener_sesion),
     usuario: modelos.Usuario = Depends(obtener_usuario_actual),
 ):
-    """Resumen del estudio del usuario: actividad, riesgo de abandono y recomendación."""
+    """Resumen del estudio del usuario: actividad, riesgo de abandono, perfil y recomendación."""
     return servicio_estudio.resumen(bd, usuario)
+
+
+@router.get("/inicio", response_model=esq.RecomendacionInicio)
+def ver_recomendacion_inicio(
+    bd: Session = Depends(obtener_sesion),
+    usuario: modelos.Usuario = Depends(obtener_usuario_actual),
+):
+    """Versión corta para la pantalla de inicio: clasificación del usuario y qué hacer ahora."""
+    return servicio_estudio.resumen_inicio(bd, usuario)

@@ -106,3 +106,22 @@ class ResumenEstudio(BaseModel):
     recomendacion: Recomendacion
     modelo: MetricasModelo
     segmentacion: Optional[Segmentacion] = None
+
+
+class SugerenciaExtra(BaseModel):
+    titulo: str
+    texto: str
+    enlace: str
+    boton: str
+
+
+class RecomendacionInicio(BaseModel):
+    """Lo que se muestra en la pantalla de inicio: clasificación del usuario y qué hacer ahora."""
+    riesgo_nivel: str                          # "bajo", "medio", "alto" o "nuevo" (sin actividad todavía)
+    riesgo_porcentaje: int
+    datos_suficientes: bool
+    grupo: Optional[str] = None                # perfil según K-means (None si aún no se puede ubicar)
+    grupo_descripcion: Optional[str] = None
+    consejo: str                               # frase según su riesgo y su perfil
+    recomendacion: Recomendacion               # la acción principal
+    extra: Optional[SugerenciaExtra] = None    # una idea adicional (p. ej. probar otro tipo de actividad)

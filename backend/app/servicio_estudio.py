@@ -180,8 +180,99 @@ def recomendar(bd: Session, usuario: modelos.Usuario, puntajes: List[esq.Puntaje
 
 
 # ---------------------------------------------------------------------------------------------
+# Pantalla de inicio: recomendación según la clasificación del usuario
+# ---------------------------------------------------------------------------------------------
+# Frase de la tarjeta según el riesgo de abandono y, si el riesgo es bajo, según el perfil (K-means)
+CONSEJOS_POR_PERFIL = {
+    "Constantes": "Llevas un ritmo excelente: seguir así es lo que más rinde.",
+    "Perfeccionistas": "Tus resultados son muy buenos. Sube el nivel con laboratorios y prácticas de código.",
+    "Esporádicos": "Estudias de vez en cuando. Prueba estudiar 3 días seguidos: así desbloqueas el logro «Constancia».",
+    "En pausa": "Qué bueno verte de vuelta. Una lección corta hoy retoma el hábito.",
+}
+CONSEJOS_POR_RIESGO = {
+    "alto": "Hace tiempo que no estudias. Empieza con algo corto: una lección toma pocos minutos y devuelve el ritmo.",
+    "medio": "Tu ritmo ha bajado un poco. Una sesión corta hoy te mantiene en camino.",
+    "bajo": "Vas muy bien. Sigue con tu ritmo de estudio.",
+}
+NUEVAS_ACTIVIDADES = [
+    ("laboratorios", "Prueba los laboratorios", "Practica con gráficos interactivos y gana XP.", "laboratorios.html", "Ver laboratorios"),
+    ("r", "Prueba Aprende R", "Escribe código R que se ejecuta en tu navegador.", "aprende_r.html", "Ver lecciones de R"),
+    ("libre", "Prueba el modo libre", "Sube un PDF tuyo y practica con preguntas sobre tus apuntes.", "libre.html", "Ir al modo libre"),
+]
+
+
+CONSEJO_NUEVO = "¡Bienvenido! Aún no tienes actividad: empieza con tu primera lección y conoceremos tu ritmo de estudio."
+
+
+def _consejo(nivel: str, grupo: Optional[str]) -> str:
+    if nivel == "nuevo":
+        return CONSEJO_NUEVO
+    if nivel != "bajo":
+        return CONSEJOS_POR_RIESGO[nivel]
+    return CONSEJOS_POR_PERFIL.get(grupo or "", CONSEJOS_POR_RIESGO["bajo"])
+
+
+def _sugerencia_extra(nivel: str, por_tipo: Dict[str, int]) -> Optional[esq.SugerenciaExtra]:
+    """Con riesgo alto no se agrega nada más: lo importante es retomar. En los demás casos se sugiere
+    el primer tipo de actividad que todavía no ha usado (variedad = menos riesgo de abandono)."""
+    if nivel == "alto":
+        return None
+    for tipo, titulo, texto, enlace, boton in NUEVAS_ACTIVIDADES:
+        if por_tipo.get(tipo, 0) == 0:
+            return esq.SugerenciaExtra(titulo=titulo, texto=texto, enlace=enlace, boton=boton)
+    return None
+
+
+def resumen_inicio(bd: Session, usuario: modelos.Usuario) -> esq.RecomendacionInicio:
+    hoy = logica.fecha_hoy()
+    eventos = obtener_eventos(bd, usuario)
+    caracteristicas = calcular_caracteristicas(eventos, usuario.fecha_registro.date(), hoy)
+    riesgo = evaluar_riesgo(caracteristicas, len(eventos), obtener_modelo(bd))
+    grupo = seg.grupo_del_usuario(bd, hoy, caracteristicas, len(eventos))
+
+    por_tipo = {tipo: 0 for tipo in TIPOS}
+    for e in eventos:
+        por_tipo[e.tipo] += 1
+
+    puntajes, ids = _puntajes_lecciones(bd, usuario)
+    # Sin ninguna actividad no hay con qué estimar el riesgo: se trata como estudiante nuevo
+    nivel = "nuevo" if not eventos else riesgo.nivel
+    return esq.RecomendacionInicio(
+        riesgo_nivel=nivel,
+        riesgo_porcentaje=0 if not eventos else riesgo.probabilidad,
+        datos_suficientes=riesgo.datos_suficientes,
+        grupo=grupo.nombre if grupo else None,
+        grupo_descripcion=grupo.descripcion if grupo else None,
+        consejo=_consejo(nivel, grupo.nombre if grupo else None),
+        recomendacion=recomendar(bd, usuario, puntajes, ids),
+        extra=_sugerencia_extra(nivel, por_tipo),
+    )
+
+
+# ---------------------------------------------------------------------------------------------
 # Resumen completo
 # ---------------------------------------------------------------------------------------------
+def _puntajes_lecciones(bd: Session, usuario: modelos.Usuario):
+    """Mejor puntaje y veces por lección del curso, y el id de cada lección (por orden)."""
+    estadisticas = {
+        leccion_id: (veces, mejor)
+        for leccion_id, veces, mejor in bd.query(
+            modelos.ProgresoLeccion.leccion_id,
+            func.count(modelos.ProgresoLeccion.id),
+            func.max(modelos.ProgresoLeccion.puntaje),
+        ).filter(modelos.ProgresoLeccion.usuario_id == usuario.id)
+        .group_by(modelos.ProgresoLeccion.leccion_id)
+    }
+    puntajes = []
+    ids: Dict[int, int] = {}      # orden -> id de la lección
+    for leccion in bd.query(modelos.Leccion).order_by(modelos.Leccion.orden).all():
+        veces, mejor = estadisticas.get(leccion.id, (0, None))
+        puntajes.append(esq.PuntajeLeccion(
+            orden=leccion.orden, titulo=leccion.titulo, mejor_puntaje=mejor, veces=veces))
+        ids[leccion.orden] = leccion.id
+    return puntajes, ids
+
+
 def resumen(bd: Session, usuario: modelos.Usuario) -> esq.ResumenEstudio:
     hoy = logica.fecha_hoy()
     eventos = obtener_eventos(bd, usuario)
@@ -199,23 +290,7 @@ def resumen(bd: Session, usuario: modelos.Usuario) -> esq.ResumenEstudio:
         for i in range(13, -1, -1)
     ]
 
-    # Mejor puntaje y veces por lección del curso
-    estadisticas = {
-        leccion_id: (veces, mejor)
-        for leccion_id, veces, mejor in bd.query(
-            modelos.ProgresoLeccion.leccion_id,
-            func.count(modelos.ProgresoLeccion.id),
-            func.max(modelos.ProgresoLeccion.puntaje),
-        ).filter(modelos.ProgresoLeccion.usuario_id == usuario.id)
-        .group_by(modelos.ProgresoLeccion.leccion_id)
-    }
-    puntajes = []
-    ids: Dict[int, int] = {}      # orden -> id de la lección
-    for leccion in bd.query(modelos.Leccion).order_by(modelos.Leccion.orden).all():
-        veces, mejor = estadisticas.get(leccion.id, (0, None))
-        puntajes.append(esq.PuntajeLeccion(
-            orden=leccion.orden, titulo=leccion.titulo, mejor_puntaje=mejor, veces=veces))
-        ids[leccion.orden] = leccion.id
+    puntajes, ids = _puntajes_lecciones(bd, usuario)
 
     modelo = obtener_modelo(bd)
     return esq.ResumenEstudio(
