@@ -1,0 +1,62 @@
+/* Diseño del inicio con menú lateral. Se carga DESPUÉS de estilos.css y unidades.css. */
+.contenedor-inicio { max-width: 980px; }
+
+.layout-inicio {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.menu-lateral {
+  position: sticky;
+  top: 16px;
+  background: white;
+  border: 2px solid #e5e5e5;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.menu-lateral a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  color: #3c3c3c;
+  font-weight: bold;
+  text-decoration: none;
+}
+.menu-lateral a:hover { background: #f0f8ff; }
+.menu-lateral a.activo { background: #ddf4ff; border-color: #1cb0f6; color: #1478b0; }
+.menu-lateral a:focus-visible, .menu-lateral button:focus-visible { outline: 3px solid #1cb0f6; outline-offset: 2px; }
+.menu-lateral .icono-menu { font-size: 1.4rem; width: 1.6em; text-align: center; flex-shrink: 0; }
+.menu-lateral .separador { height: 1px; background: #e5e5e5; margin: 8px 0; }
+.menu-lateral .enlace-boton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.contenido-inicio { min-width: 0; }
+
+/* Pantallas pequeñas: el menú pasa arriba como una tira horizontal */
+@media (max-width: 760px) {
+  .layout-inicio { grid-template-columns: 1fr; gap: 16px; }
+  .menu-lateral {
+    position: static;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 6px;
+  }
+  .menu-lateral a, .menu-lateral .enlace-boton { flex-direction: column; gap: 2px; padding: 8px 10px; font-size: 0.8rem; white-space: nowrap; width: auto; }
+  .menu-lateral .separador { display: none; }
+}
