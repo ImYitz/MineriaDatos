@@ -1,0 +1,137 @@
+/* Temas de color. Se carga con @import desde animaciones.css.
+   El tema "Clásico" (verde) no usa nada de aquí: son los colores originales de estilos.css.
+   Los demás se activan con <html data-tema="..."> y solo cambian las variables --t-*.
+   Para añadir un tema: copia un bloque de variables, cambia sus colores y añade su fila en js/tema.js. */
+
+html[data-tema="oceano"]    { --t-p:#1c9be6; --t-osc:#1273b5; --t-hover:#1688cf; --t-claro:#dcefff; --t-tenue:#f0f8ff; --t-borde:#a9d3f2; --t-fondo:#f1f6fb; }
+html[data-tema="violeta"]   { --t-p:#a560e8; --t-osc:#7a3fc0; --t-hover:#9250d6; --t-claro:#efe0ff; --t-tenue:#f8f2ff; --t-borde:#d9bff5; --t-fondo:#f7f3fb; }
+html[data-tema="atardecer"] { --t-p:#ff8a1f; --t-osc:#b85f00; --t-hover:#ec7c14; --t-claro:#ffe8cc; --t-tenue:#fff6ec; --t-borde:#ffd2a3; --t-fondo:#fdf6ef; }
+html[data-tema="rosa"]      { --t-p:#ff5fa2; --t-osc:#c23a79; --t-hover:#ee4f92; --t-claro:#ffdcec; --t-tenue:#fff1f7; --t-borde:#ffc1da; --t-fondo:#fcf3f7; }
+html[data-tema="menta"]     { --t-p:#14b8a6; --t-osc:#0d7f72; --t-hover:#10a595; --t-claro:#d3f5f0; --t-tenue:#eefbf9; --t-borde:#a6e3da; --t-fondo:#f0f8f7; }
+html[data-tema="grafito"]   { --t-p:#5b6b8a; --t-osc:#3d4b66; --t-hover:#4f5e7c; --t-claro:#e1e6f0; --t-tenue:#f3f5f9; --t-borde:#c5cddb; --t-fondo:#f2f4f7; }
+
+/* ---------- Fondo y selección de texto ---------- */
+html[data-tema] body { background: var(--t-fondo); }
+html[data-tema] ::selection { background: var(--t-claro); }
+
+/* ---------- Enlaces y textos de acento ---------- */
+html[data-tema] .volver,
+html[data-tema] .navegacion a,
+html[data-tema] .enlace-alterno a,
+html[data-tema] .reco-mas,
+html[data-tema] .reco-extra a,
+html[data-tema] .reco-principal .reco-relacionada a,
+html[data-tema] .tarjeta-recomendacion a:not(.boton) { color: var(--t-osc); }
+html[data-tema] .mensaje-nivel { color: var(--t-p); }
+
+/* ---------- Botones principales ---------- */
+html[data-tema] .boton:not(:disabled):not(.boton-secundario),
+html[data-tema] .boton-item:not(:disabled):not(.comprar):not(.quitar),
+html[data-tema] .fila-historial button { background: var(--t-p); }
+html[data-tema] .boton-item.comprar:not(:disabled) { background: var(--t-osc); }
+html[data-tema] .lab-boton.principal:not(:disabled),
+html[data-tema] .boton-r.ejecutar:not(:disabled) { background: var(--t-p); border-color: var(--t-p); }
+html[data-tema] .lab-boton.principal:not(:disabled):hover,
+html[data-tema] .boton-r.ejecutar:not(:disabled):hover { background: var(--t-hover); }
+
+/* ---------- Barras ---------- */
+html[data-tema] .barra-relleno:not(.barra-relleno-xp):not([class*="riesgo"]) { background: var(--t-p); }
+html[data-tema] .barra-dia:not(.vacia) { background: var(--t-p); }
+html[data-tema] .lab-fila-barra.actual .relleno { background: var(--t-p); }
+html[data-tema] .lab-fila-barra.actual .etiqueta { color: var(--t-osc); }
+
+/* ---------- Estados seleccionados y "hover" ---------- */
+html[data-tema] .opcion.elegida { border-color: var(--t-p); background: var(--t-claro); }
+html[data-tema] .pestana.activa,
+html[data-tema] .lab-boton.activo,
+html[data-tema] .menu-lateral a.activo { border-color: var(--t-p); background: var(--t-claro); color: var(--t-osc); }
+html[data-tema] .opcion:not(.elegida):not(.correcta):not(.incorrecta):hover,
+html[data-tema] .menu-lateral a:not(.activo):hover,
+html[data-tema] .lab-boton:not(.activo):not(.principal):not(:disabled):hover,
+html[data-tema] .boton-r:not(.ejecutar):not(:disabled):hover { background: var(--t-tenue); }
+html[data-tema] .tarjeta-leccion:hover { border-color: var(--t-p); }
+html[data-tema] .formulario input:focus,
+html[data-tema] .editor-r:focus { border-color: var(--t-p); }
+html[data-tema] .lab-deslizador input { accent-color: var(--t-p); }
+
+/* ---------- Foco con teclado ---------- */
+html[data-tema] .lab-boton:focus-visible,
+html[data-tema] .lab-deslizador input:focus-visible,
+html[data-tema] .opcion:focus-visible,
+html[data-tema] .boton-r:focus-visible,
+html[data-tema] .estado-r button:focus-visible,
+html[data-tema] .menu-lateral a:focus-visible,
+html[data-tema] .menu-lateral button:focus-visible { outline-color: var(--t-p); }
+
+/* ---------- Banners y tarjetas con acento ---------- */
+html[data-tema] .banner-unidad { background: var(--t-osc); }
+html[data-tema] .banner-unidad.alterna { background: var(--t-p); }
+html[data-tema] .tarjeta-reco { background: var(--t-tenue); border-top-color: var(--t-borde); border-right-color: var(--t-borde); border-bottom-color: var(--t-borde); }
+html[data-tema] .tarjeta-reco.riesgo-nuevo { border-left-color: var(--t-p); }
+html[data-tema] .chip-riesgo.riesgo-nuevo { background: var(--t-p); }
+html[data-tema] .tarjeta-recomendacion { background: var(--t-tenue); border-color: var(--t-borde); }
+html[data-tema] .tarjeta-tarea:not(.hecha):not(.fallida) { border-color: var(--t-borde); }
+html[data-tema] .caja-subida input[type="file"] { border-color: var(--t-borde); background: var(--t-tenue); }
+html[data-tema] .tabla-estudio tr.mi-grupo td { background: var(--t-tenue); }
+
+/* ---------- Transición suave al cambiar de tema ---------- */
+html.cambiando-tema *, html.cambiando-tema *::before, html.cambiando-tema *::after {
+  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease, fill 0.35s ease !important;
+}
+
+/* ---------- Botón y panel para elegir el tema ---------- */
+.boton-tema-flotante {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 900;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid #e5e5e5;
+  background: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+.panel-tema {
+  position: fixed;
+  z-index: 1000;
+  width: 270px;
+  background: white;
+  border: 2px solid #e5e5e5;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  transform-origin: top left;
+  animation: pop 0.25s ease both;
+}
+.panel-tema.movil { left: 12px; right: 12px; bottom: 12px; top: auto; width: auto; transform-origin: bottom center; }
+.panel-tema strong { display: block; margin-bottom: 10px; }
+.rejilla-temas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.opcion-tema {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  background: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #3c3c3c;
+  cursor: pointer;
+}
+.opcion-tema:hover { transform: translateY(-2px); background: #f7f7f7; }
+.opcion-tema:focus-visible { outline: 3px solid #1cb0f6; outline-offset: 2px; }
+.opcion-tema[aria-pressed="true"] { border-color: #3c3c3c; background: #f4f4f4; }
+.opcion-tema .muestra {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease;
+}
+.opcion-tema:hover .muestra { transform: scale(1.12) rotate(15deg); }
+.opcion-tema[aria-pressed="true"] .muestra { transform: scale(1.12); }

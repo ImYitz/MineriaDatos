@@ -82,11 +82,53 @@ function iconoLogro(nombre) {
   return ICONOS_LOGRO[nombre] || "🏅";
 }
 
-// ---------- Animaciones ----------
-// api.js se carga en todas las páginas, así que desde aquí se carga también js/animaciones.js
-// (los estilos de las animaciones entran por el @import de css/estilos.css).
-(function () {
+// ---------- Tema de color ----------
+// El tema elegido se guarda en el navegador, separado por usuario (el id sale del token).
+// Se aplica aquí, en cuanto carga api.js, para que la página no parpadee con otro color.
+const CLAVE_TEMA = "tema_aprendizaje";
+
+function idUsuarioDelToken() {
+  try {
+    const token = obtenerToken();
+    if (!token) return null;
+    const cuerpo = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    return JSON.parse(atob(cuerpo)).sub || null;
+  } catch (e) { return null; }
+}
+
+function leerTema() {
+  try {
+    const id = idUsuarioDelToken();
+    return (id && localStorage.getItem(CLAVE_TEMA + "_" + id)) || localStorage.getItem(CLAVE_TEMA) || "clasico";
+  } catch (e) { return "clasico"; }
+}
+
+// "clasico" = colores originales (sin atributo). Cualquier otro nombre activa su bloque de css/temas.css
+function aplicarTema(tema) {
+  const raiz = document.documentElement;
+  if (tema && tema !== "clasico" && /^[a-z]+$/.test(tema)) {
+    raiz.setAttribute("data-tema", tema);
+  } else {
+    raiz.removeAttribute("data-tema");
+  }
+}
+
+function guardarTema(tema) {
+  aplicarTema(tema);
+  try {
+    localStorage.setItem(CLAVE_TEMA, tema);   // último tema usado (también sirve en login y registro)
+    const id = idUsuarioDelToken();
+    if (id) localStorage.setItem(CLAVE_TEMA + "_" + id, tema);
+  } catch (e) { /* nada */ }
+}
+
+aplicarTema(leerTema());
+
+// ---------- Animaciones y selector de tema ----------
+// api.js se carga en todas las páginas, así que desde aquí se cargan también js/animaciones.js
+// y js/tema.js (los estilos entran por los @import de css/estilos.css y css/animaciones.css).
+["js/animaciones.js?v=1", "js/tema.js?v=1"].forEach(function (ruta) {
   const script = document.createElement("script");
-  script.src = "js/animaciones.js?v=1";
+  script.src = ruta;
   document.head.appendChild(script);
-})();
+});

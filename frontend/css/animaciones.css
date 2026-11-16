@@ -1,3 +1,5 @@
+@import url("temas.css");
+
 /* Animaciones de la aplicación. Se carga con @import desde estilos.css.
    Todo se desactiva si el sistema del usuario pide "reducir movimiento". */
 
