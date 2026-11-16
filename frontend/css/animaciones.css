@@ -1,0 +1,205 @@
+/* Animaciones de la aplicación. Se carga con @import desde estilos.css.
+   Todo se desactiva si el sistema del usuario pide "reducir movimiento". */
+
+/* ---------- Entrada de página y tarjetas ---------- */
+@keyframes aparecer-subiendo {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes rebote-suave {
+  0%, 100% { transform: scale(1); }
+  40%      { transform: scale(1.06); }
+  70%      { transform: scale(0.98); }
+}
+@keyframes sacudir {
+  0%, 100% { transform: translateX(0); }
+  18% { transform: translateX(-8px); }
+  36% { transform: translateX(7px); }
+  54% { transform: translateX(-5px); }
+  72% { transform: translateX(3px); }
+}
+@keyframes brillo-verde {
+  0%   { box-shadow: 0 0 0 0 rgba(88, 204, 2, 0.55); }
+  100% { box-shadow: 0 0 0 14px rgba(88, 204, 2, 0); }
+}
+@keyframes brillo-dorado {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 200, 0, 0.6); }
+  100% { box-shadow: 0 0 0 16px rgba(255, 200, 0, 0); }
+}
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes deslizar-izq {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes destello {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes onda {
+  from { transform: scale(0); opacity: 0.45; }
+  to   { transform: scale(1); opacity: 0; }
+}
+@keyframes pulso-llamada {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}
+
+main.contenedor { animation: aparecer-subiendo 0.45s ease-out both; }
+.menu-lateral { animation: deslizar-izq 0.4s ease-out both; }
+
+.tarjeta-leccion,
+.tarjeta-logro,
+.tarjeta-teoria,
+.tarjeta-tarea,
+.fila-historial,
+.tarjeta-estudio,
+.datos-perfil li {
+  animation: aparecer-subiendo 0.45s ease-out both;
+}
+.tarjeta-leccion:nth-child(1), .tarjeta-logro:nth-child(1), .datos-perfil li:nth-child(1), .fila-historial:nth-child(1) { animation-delay: 0.03s; }
+.tarjeta-leccion:nth-child(2), .tarjeta-logro:nth-child(2), .datos-perfil li:nth-child(2), .fila-historial:nth-child(2) { animation-delay: 0.08s; }
+.tarjeta-leccion:nth-child(3), .tarjeta-logro:nth-child(3), .datos-perfil li:nth-child(3), .fila-historial:nth-child(3) { animation-delay: 0.13s; }
+.tarjeta-leccion:nth-child(4), .tarjeta-logro:nth-child(4), .datos-perfil li:nth-child(4), .fila-historial:nth-child(4) { animation-delay: 0.18s; }
+.tarjeta-leccion:nth-child(5), .tarjeta-logro:nth-child(5), .datos-perfil li:nth-child(5), .fila-historial:nth-child(5) { animation-delay: 0.23s; }
+.tarjeta-leccion:nth-child(6), .tarjeta-logro:nth-child(6), .datos-perfil li:nth-child(6), .fila-historial:nth-child(6) { animation-delay: 0.28s; }
+.tarjeta-leccion:nth-child(7), .tarjeta-logro:nth-child(7), .datos-perfil li:nth-child(7) { animation-delay: 0.33s; }
+.tarjeta-leccion:nth-child(8), .tarjeta-logro:nth-child(8), .datos-perfil li:nth-child(8) { animation-delay: 0.38s; }
+.tarjeta-leccion:nth-child(n+9), .tarjeta-logro:nth-child(n+9) { animation-delay: 0.43s; }
+
+.banner-unidad { animation: deslizar-izq 0.5s ease-out both; }
+
+/* ---------- Clics: efecto de pulsación, elevación y onda ---------- */
+.boton, .opcion, .pestana, .boton-item, .boton-r, .lab-boton,
+.enlace-boton, .tarjeta-leccion, .menu-lateral a, .fila-historial button {
+  transition: transform 0.12s ease, box-shadow 0.2s ease, background-color 0.2s ease,
+              border-color 0.2s ease, filter 0.2s ease;
+}
+.boton:not(:disabled):hover, .boton-item:not(:disabled):hover { filter: brightness(1.07); transform: translateY(-1px); }
+.boton:not(:disabled):active, .boton-item:not(:disabled):active,
+.boton-r:not(:disabled):active, .lab-boton:not(:disabled):active,
+.pestana:active, .fila-historial button:active { transform: scale(0.96); }
+.opcion:not(:disabled):hover { transform: translateX(4px); }
+.opcion:not(:disabled):active { transform: scale(0.98); }
+.tarjeta-leccion:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08); }
+.tarjeta-leccion:active { transform: scale(0.98); }
+.menu-lateral a:hover { transform: translateX(3px); }
+.menu-lateral a:active { transform: scale(0.97); }
+.pestana.activa { animation: rebote-suave 0.35s ease; }
+.lab-boton.activo { animation: rebote-suave 0.3s ease; }
+
+/* Contenedores de la onda (ripple) */
+.boton, .opcion, .pestana, .boton-item, .boton-r, .lab-boton,
+.tarjeta-leccion, .menu-lateral a, .fila-historial button, .enlace-boton {
+  position: relative;
+  overflow: hidden;
+}
+.onda-clic {
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+  pointer-events: none;
+  transform: scale(0);
+  animation: onda 0.6s ease-out forwards;
+}
+.boton .onda-clic { background: #ffffff; }
+
+/* ---------- Ejercicios y preguntas ---------- */
+.opcion { animation: aparecer-subiendo 0.35s ease-out both; }
+.opcion:nth-child(1) { animation-delay: 0.02s; }
+.opcion:nth-child(2) { animation-delay: 0.08s; }
+.opcion:nth-child(3) { animation-delay: 0.14s; }
+.opcion:nth-child(4) { animation-delay: 0.20s; }
+.opcion:nth-child(n+5) { animation-delay: 0.26s; }
+
+.opcion.elegida   { animation: rebote-suave 0.3s ease; }
+.opcion.correcta  { animation: pop 0.45s ease, brillo-verde 0.8s ease-out; }
+.opcion.incorrecta { animation: sacudir 0.45s ease; }
+
+.retroalimentacion.bien { animation: aparecer-subiendo 0.35s ease-out both; }
+.retroalimentacion.mal  { animation: sacudir 0.45s ease; }
+.nota-pregunta.bien { animation: aparecer-subiendo 0.35s ease-out both; }
+.nota-pregunta.mal  { animation: sacudir 0.45s ease; }
+
+.enunciado-animado { animation: aparecer-subiendo 0.4s ease-out both; }
+
+/* ---------- Barras ---------- */
+.barra-relleno { transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1); position: relative; overflow: hidden; }
+.barra-relleno::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: destello 2.4s ease-in-out infinite;
+}
+.barra-riesgo .barra-relleno::after, .barra-logro .barra-relleno::after { animation: none; }
+
+/* ---------- Resultado final y recompensas ---------- */
+#zona-final:not(.oculto) { animation: pop 0.55s ease both; transform-origin: top center; }
+.resumen-xp:not(:empty), .resumen-monedas:not(:empty) { animation: pop 0.5s ease 0.25s both; }
+.mensaje-nivel:not(:empty) { animation: pulso-llamada 0.9s ease-in-out 0.5s 3, aparecer 0.4s ease both; }
+.logro-nuevo {
+  animation: deslizar-izq 0.5s ease-out both, brillo-dorado 1.2s ease-out 0.3s 2;
+  background-image: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.7) 50%, transparent 70%);
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+}
+.logro-nuevo:nth-child(2) { animation-delay: 0.2s, 0.5s; }
+.logro-nuevo:nth-child(3) { animation-delay: 0.4s, 0.7s; }
+.logro-nuevo:nth-child(n+4) { animation-delay: 0.6s, 0.9s; }
+
+.tarjeta-logro.obtenido .icono-logro { animation: rebote-suave 2.4s ease-in-out infinite; }
+.tarjeta-tarea.hecha { animation: brillo-verde 0.8s ease-out; }
+.tarjeta-tarea.fallida { animation: sacudir 0.45s ease; }
+.checks-r li.ok .marca { animation: pop 0.4s ease; }
+.checks-r li.mal .marca { animation: sacudir 0.4s ease; }
+
+/* ---------- Mensajes ---------- */
+.mensaje-error:not(:empty) { animation: sacudir 0.45s ease; }
+.mensaje-ok:not(:empty), .mensaje-practica:not(:empty) { animation: aparecer-subiendo 0.35s ease-out both; }
+.aviso-libre, .aviso-estudio { animation: aparecer 0.4s ease both; }
+
+/* ---------- Avatar, fichas y niveles ---------- */
+.avatar-grande svg { animation: flotar 3.2s ease-in-out infinite; }
+.avatar-grande.cambio svg { animation: pop 0.45s ease, flotar 3.2s ease-in-out 0.45s infinite; }
+.avatar-mini svg { transition: transform 0.25s ease; }
+.avatar-mini:hover svg { transform: rotate(-8deg) scale(1.1); }
+.tarjeta-item { transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+.tarjeta-item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08); }
+.tarjeta-item.equipado { animation: brillo-verde 0.8s ease-out; }
+.ficha { transition: transform 0.15s ease; }
+.ficha:hover { transform: scale(1.08); }
+.etiqueta-nivel { animation: pop 0.5s ease 0.15s both; }
+#ficha-racha { animation: pulso-llamada 2.6s ease-in-out infinite; }
+.tarjeta-reco { animation: aparecer-subiendo 0.5s ease-out both; }
+.estado-r.listo { animation: pop 0.4s ease; }
+
+/* ---------- Confeti ---------- */
+.confeti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* ---------- Accesibilidad ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+  }
+  .confeti, .onda-clic { display: none !important; }
+}

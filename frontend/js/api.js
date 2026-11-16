@@ -81,3 +81,12 @@ const ICONOS_LOGRO = {
 function iconoLogro(nombre) {
   return ICONOS_LOGRO[nombre] || "🏅";
 }
+
+// ---------- Animaciones ----------
+// api.js se carga en todas las páginas, así que desde aquí se carga también js/animaciones.js
+// (los estilos de las animaciones entran por el @import de css/estilos.css).
+(function () {
+  const script = document.createElement("script");
+  script.src = "js/animaciones.js?v=1";
+  document.head.appendChild(script);
+})();
