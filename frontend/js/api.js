@@ -76,6 +76,18 @@ const ICONOS_LOGRO = {
   calendario: "📅",
   matraz: "🧪",
   codigo: "💻",
+  cohete: "🚀",
+  rayo: "⚡",
+  gema: "💎",
+  corona: "👑",
+  cerebro: "🧠",
+  lupa: "🔍",
+  libro: "📚",
+  sol: "🌅",
+  luna: "🌙",
+  confeti: "🎉",
+  brujula: "🧭",
+  robot: "🤖",
 };
 
 function iconoLogro(nombre) {

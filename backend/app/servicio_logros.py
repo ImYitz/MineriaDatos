@@ -3,14 +3,24 @@
 # Cómo funciona: cada logro del catálogo dice "tipo de condición + valor objetivo".
 # Aquí calculamos el valor ACTUAL del usuario para ese tipo y, si llega al
 # objetivo, el logro se desbloquea. Se revisa cada vez que se completa una lección,
-# un laboratorio o una práctica de R.
+# un laboratorio, una práctica de R o una práctica del modo libre.
 from typing import List
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from . import modelos, logica
+from .datos_estudio import obtener_eventos
 from .modelos_laboratorios import ProgresoLaboratorio
 from .modelos_r import ProgresoR
+
+
+def _eventos(bd: Session, usuario: modelos.Usuario):
+    """Todas las actividades terminadas del usuario (fecha, hora y tipo). Se calculan una sola vez
+    por petición, aunque haya muchos logros que las necesiten."""
+    cache = bd.info.setdefault("eventos_logros", {})
+    if usuario.id not in cache:
+        cache[usuario.id] = obtener_eventos(bd, usuario)
+    return cache[usuario.id]
 
 
 def valor_actual(bd: Session, usuario: modelos.Usuario, tipo_condicion: str) -> int:
@@ -61,6 +71,22 @@ def valor_actual(bd: Session, usuario: modelos.Usuario, tipo_condicion: str) -> 
         return logica.racha_vigente(usuario, logica.fecha_hoy())
     if tipo_condicion == "nivel":
         return usuario.nivel
+
+    # ---- Tipos que salen del historial completo de actividades ----
+    if tipo_condicion == "libre_completadas":
+        return sum(1 for e in _eventos(bd, usuario) if e.tipo == "libre")
+    if tipo_condicion == "actividades_totales":
+        return len(_eventos(bd, usuario))
+    if tipo_condicion == "tipos_actividad":
+        return len({e.tipo for e in _eventos(bd, usuario)})
+    if tipo_condicion == "dias_activos":
+        return len({e.fecha for e in _eventos(bd, usuario)})
+    if tipo_condicion == "dias_fin_de_semana":
+        return len({e.fecha for e in _eventos(bd, usuario) if e.fecha.weekday() >= 5})
+    if tipo_condicion == "madrugador":
+        return sum(1 for e in _eventos(bd, usuario) if e.instante.hour < 7)
+    if tipo_condicion == "noctambulo":
+        return sum(1 for e in _eventos(bd, usuario) if e.instante.hour >= 22)
     return 0   # tipo desconocido: nunca se cumple
 
 
