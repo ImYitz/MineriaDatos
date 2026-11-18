@@ -1,0 +1,27 @@
+/* Estilos de la pantalla "Informes en PDF". Se carga DESPUÉS de estilos.css. */
+.contenedor-informes { max-width: 760px; }
+
+.tarjeta-informe {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: white;
+  border: 2px solid #e5e5e5;
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  animation: aparecer-subiendo 0.45s ease-out both;
+}
+.tarjeta-informe .icono-informe { font-size: 2.4rem; flex-shrink: 0; }
+.tarjeta-informe .cuerpo-informe { flex: 1; min-width: 0; }
+.tarjeta-informe h2 { margin: 0 0 6px; font-size: 1.2rem; }
+.tarjeta-informe p { margin: 0 0 12px; line-height: 1.5; color: #555; }
+.tarjeta-informe .boton { max-width: 340px; }
+
+.mensaje-informe { min-height: 1.4em; margin: 10px 0 0 !important; font-weight: bold; }
+.mensaje-informe.ok { color: #3f7d00; }
+.mensaje-informe.error { color: #b42318; }
+
+@media (max-width: 520px) {
+  .tarjeta-informe { flex-direction: column; }
+}

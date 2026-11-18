@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informes PDF</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+  <link rel="stylesheet" href="css/informes.css?v=1">
+  <link rel="stylesheet" href="css/menu_lateral.css?v=2">
+</head>
+<body>
+  <main class="contenedor contenedor-informes">
+    <h1>📥 Informes en PDF</h1>
+    <p class="texto-suave">Genera y descarga documentos en PDF. Se crean en el momento, así que siempre muestran los datos más recientes.</p>
+
+    <section class="tarjeta-informe">
+      <div class="icono-informe">📊</div>
+      <div class="cuerpo-informe">
+        <h2>Resumen de mi cuenta</h2>
+        <p>Tus datos, nivel y XP, el avance en lecciones, laboratorios, lecciones de R y modo libre, tu actividad y los logros que has obtenido o te faltan.</p>
+        <button id="boton-resumen" class="boton" type="button">Descargar resumen (PDF)</button>
+        <p id="mensaje-resumen" class="mensaje-informe" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="tarjeta-informe">
+      <div class="icono-informe">📘</div>
+      <div class="cuerpo-informe">
+        <h2>Documentación de la aplicación</h2>
+        <p>Qué es la app y cómo funciona: tecnologías, reglas del juego, contenido, arquitectura, modelo de datos, API, instalación y dónde cambiar cada cosa.</p>
+        <button id="boton-documentacion" class="boton" type="button">Descargar documentación (PDF)</button>
+        <p id="mensaje-documentacion" class="mensaje-informe" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js?v=7"></script>
+  <script src="js/menu.js?v=2"></script>
+  <script src="js/informes.js?v=1"></script>
+</body>
+</html>
