@@ -69,3 +69,11 @@
   layout.appendChild(principal);
   document.body.classList.add("con-menu");
 })();
+
+// Notificaciones de logros (estilo Minecraft, arriba a la derecha). menu.js está en todas las páginas
+// privadas, así que desde aquí se carga el script que las muestra.
+(function () {
+  const script = document.createElement("script");
+  script.src = "js/notificaciones.js?v=1";
+  document.head.appendChild(script);
+})();

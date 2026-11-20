@@ -1,0 +1,66 @@
+/* Notificaciones de logros (estilo Minecraft). Las carga js/notificaciones.js. */
+.notificaciones-logros {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(340px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+@keyframes toast-entrar {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+@keyframes toast-salir {
+  from { transform: none; opacity: 1; }
+  to   { transform: translateX(120%); opacity: 0; }
+}
+
+.toast-logro {
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 10px 10px;
+  background: #313131;
+  color: #ffffff;
+  font-family: "Courier New", Consolas, monospace;
+  border: 4px solid #1a1a1a;
+  /* Borde interior claro y esquinas "recortadas" como en un pixel art */
+  box-shadow: inset 0 0 0 2px #5b5b5b, 0 6px 16px rgba(0, 0, 0, 0.35);
+  border-radius: 2px;
+  animation: toast-entrar 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.toast-logro.saliendo { animation: toast-salir 0.4s ease-in both; }
+
+.toast-icono {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.9rem;
+  background: #8b8b8b;
+  border: 3px solid #1a1a1a;
+  box-shadow: inset 3px 3px 0 #c6c6c6, inset -3px -3px 0 #555555;
+}
+
+.toast-texto { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.toast-titulo { color: #ffff55; font-weight: bold; font-size: 0.85rem; text-shadow: 2px 2px 0 #3f3f15; }
+.toast-nombre { font-size: 1.05rem; text-shadow: 2px 2px 0 #1a1a1a; overflow-wrap: anywhere; }
+.toast-detalle { color: #c8c8c8; font-size: 0.78rem; line-height: 1.3; }
+.toast-monedas { color: #ffc800; font-weight: bold; font-size: 0.85rem; text-shadow: 2px 2px 0 #3f3000; }
+
+@media (max-width: 760px) {
+  .notificaciones-logros { top: 8px; right: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast-logro, .toast-logro.saliendo { animation: none; }
+  .toast-logro.saliendo { opacity: 0; }
+}
