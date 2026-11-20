@@ -3,13 +3,14 @@
 # Cómo funciona: cada logro del catálogo dice "tipo de condición + valor objetivo".
 # Aquí calculamos el valor ACTUAL del usuario para ese tipo y, si llega al
 # objetivo, el logro se desbloquea. Se revisa cada vez que se completa una lección,
-# un laboratorio, una práctica de R o una práctica del modo libre.
+# un laboratorio, una práctica de R, una práctica del modo libre o una partida de contrarreloj.
 from typing import List
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from . import modelos, logica
 from .datos_estudio import obtener_eventos
+from .modelos_contrarreloj import PartidaContrarreloj
 from .modelos_laboratorios import ProgresoLaboratorio
 from .modelos_r import ProgresoR
 
@@ -71,6 +72,28 @@ def valor_actual(bd: Session, usuario: modelos.Usuario, tipo_condicion: str) -> 
         return logica.racha_vigente(usuario, logica.fecha_hoy())
     if tipo_condicion == "nivel":
         return usuario.nivel
+
+    # ---- Contrarreloj ----
+    if tipo_condicion == "contrarreloj_partidas":
+        return (
+            bd.query(func.count(PartidaContrarreloj.id))
+            .filter(PartidaContrarreloj.usuario_id == usuario.id, PartidaContrarreloj.completada.is_(True),
+                    PartidaContrarreloj.respondidas > 0)
+            .scalar()
+        ) or 0
+    if tipo_condicion == "contrarreloj_mejor":
+        return (
+            bd.query(func.max(PartidaContrarreloj.aciertos))
+            .filter(PartidaContrarreloj.usuario_id == usuario.id, PartidaContrarreloj.completada.is_(True))
+            .scalar()
+        ) or 0
+    if tipo_condicion == "contrarreloj_completo":
+        return (
+            bd.query(func.count(PartidaContrarreloj.id))
+            .filter(PartidaContrarreloj.usuario_id == usuario.id, PartidaContrarreloj.completada.is_(True),
+                    PartidaContrarreloj.termino_todas.is_(True))
+            .scalar()
+        ) or 0
 
     # ---- Tipos que salen del historial completo de actividades ----
     if tipo_condicion == "libre_completadas":

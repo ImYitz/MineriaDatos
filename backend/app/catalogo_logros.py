@@ -9,6 +9,9 @@
 #   "lecciones_r_completadas"  -> cuántas lecciones de R DISTINTAS ha aprobado
 #   "practica_r_perfecta"      -> cuántas veces ha aprobado una práctica de R sin fallos
 #   "libre_completadas"        -> cuántas prácticas del modo libre ha completado
+#   "contrarreloj_partidas"    -> cuántas partidas de contrarreloj ha jugado (con alguna respuesta)
+#   "contrarreloj_mejor"       -> su mejor marca de aciertos en una partida de contrarreloj
+#   "contrarreloj_completo"    -> cuántas partidas de contrarreloj ha terminado respondiendo TODAS las preguntas
 #   "actividades_totales"      -> cuántas actividades ha terminado (de cualquier tipo)
 #   "tipos_actividad"          -> cuántos tipos de actividad distintos ha usado (máximo 4)
 #   "dias_activos"             -> en cuántos días distintos ha estudiado
@@ -151,6 +154,17 @@ CATALOGO = [
     {"codigo": "actividades_50", "nombre": "Máquina de estudiar",
      "descripcion": "Termina 50 actividades", "icono": "robot",
      "tipo_condicion": "actividades_totales", "valor_objetivo": 50, "recompensa_monedas": 100},
+    # ---- Contrarreloj (Etapa 11) ----
+    {"codigo": "primera_contrarreloj", "nombre": "Contra el reloj",
+     "descripcion": "Juega tu primera partida de contrarreloj", "icono": "rayo",
+     "tipo_condicion": "contrarreloj_partidas", "valor_objetivo": 1, "recompensa_monedas": 15},
+    {"codigo": "contrarreloj_10", "nombre": "Rápido y certero",
+     "descripcion": "Acierta 10 preguntas en una sola partida de contrarreloj", "icono": "cohete",
+     "tipo_condicion": "contrarreloj_mejor", "valor_objetivo": 10, "recompensa_monedas": 40},
+    {"codigo": "contrarreloj_completo", "nombre": "Maestro del tiempo",
+     "descripcion": "Responde todas las preguntas de una partida de contrarreloj antes de que se acabe el tiempo",
+     "icono": "trofeo",
+     "tipo_condicion": "contrarreloj_completo", "valor_objetivo": 1, "recompensa_monedas": 60},
 ]
 
 

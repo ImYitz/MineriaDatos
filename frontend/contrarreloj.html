@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contrarreloj</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+  <link rel="stylesheet" href="css/contrarreloj.css?v=1">
+  <link rel="stylesheet" href="css/menu_lateral.css?v=2">
+</head>
+<body>
+  <main class="contenedor contenedor-cr">
+    <h1>⏱️ Contrarreloj</h1>
+
+    <!-- 1) Pantalla de inicio -->
+    <section id="zona-inicio">
+      <p id="descripcion-cr" class="texto-suave"></p>
+      <div class="cr-resumen">
+        <div class="cr-dato"><strong id="cr-record">-</strong><span>Tu récord (aciertos)</span></div>
+        <div class="cr-dato"><strong id="cr-hoy">-</strong><span>Recompensas de hoy</span></div>
+      </div>
+      <p id="aviso-cr" class="cr-aviso oculto"></p>
+      <p id="error-cr" class="mensaje-error"></p>
+      <button id="boton-comenzar" class="boton" type="button" disabled>¡Comenzar!</button>
+      <h2>Tus partidas recientes</h2>
+      <div id="lista-historial"></div>
+    </section>
+
+    <!-- 2) Partida en curso -->
+    <section id="zona-juego" class="oculto">
+      <div class="cr-hud">
+        <span class="cr-tiempo"><span id="cr-tiempo">60</span> s</span>
+        <span id="cr-aciertos">✓ 0</span>
+        <span id="cr-progreso" class="texto-suave"></span>
+      </div>
+      <div class="barra"><div id="cr-barra" class="barra-relleno cr-barra"></div></div>
+      <h2 id="enunciado"></h2>
+      <div id="opciones" class="cr-opciones"></div>
+      <p id="retroalimentacion" class="retroalimentacion"></p>
+      <p id="error-juego" class="mensaje-error"></p>
+    </section>
+
+    <!-- 3) Resultado -->
+    <section id="zona-final" class="oculto">
+      <h2 id="titulo-final">¡Se acabó el tiempo!</h2>
+      <p id="resumen-final"></p>
+      <p id="cr-puntos" class="cr-puntos"></p>
+      <p id="cr-mensaje" class="cr-mensaje"></p>
+      <p id="resumen-xp" class="resumen-xp"></p>
+      <p id="mensaje-nivel" class="mensaje-nivel"></p>
+      <p id="resumen-monedas" class="resumen-monedas"></p>
+      <p id="resumen-racha" class="texto-suave"></p>
+      <p id="motivo-sin-recompensa" class="cr-aviso oculto"></p>
+      <div id="logros-nuevos"></div>
+      <a href="contrarreloj.html" class="boton">Jugar otra vez</a>
+    </section>
+  </main>
+
+  <script src="js/api.js?v=7"></script>
+  <script src="js/menu.js?v=3"></script>
+  <script src="js/contrarreloj.js?v=1"></script>
+</body>
+</html>

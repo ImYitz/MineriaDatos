@@ -1,0 +1,51 @@
+/* Estilos del modo contrarreloj. Se carga DESPUÉS de estilos.css. */
+.contenedor-cr { max-width: 720px; }
+
+.cr-resumen { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 14px 0; }
+.cr-dato { background: white; border: 2px solid #e5e5e5; border-radius: 12px; padding: 10px; text-align: center; }
+.cr-dato strong { display: block; font-size: 1.6rem; }
+.cr-dato span { color: #777; font-size: 0.85rem; }
+
+.cr-aviso {
+  background: #fff4e0;
+  border: 2px solid #ffd9a0;
+  color: #8a5300;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Barra de tiempo y datos de la partida */
+.cr-hud { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-weight: bold; }
+.cr-tiempo { font-size: 2rem; color: #1478b0; font-variant-numeric: tabular-nums; }
+.cr-tiempo.poco { color: #ff9600; }
+.cr-tiempo.urgente { color: #ea2b2b; }
+#cr-aciertos { font-size: 1.3rem; color: #58a700; }
+.barra-relleno.cr-barra { width: 100%; transition: none; background: #1cb0f6; }
+.cr-barra::after { animation: none !important; }
+.cr-barra.poco { background: #ff9600; }
+.cr-barra.urgente { background: #ff4b4b; }
+
+/* En una partida rápida no conviene que las opciones se animen al entrar */
+.cr-opciones .opcion { animation: none; }
+.cr-opciones .opcion:disabled { cursor: default; }
+
+/* Resultado */
+.cr-puntos { font-size: 1.5rem; font-weight: bold; color: #1478b0; margin: 4px 0; }
+.cr-mensaje { font-weight: bold; min-height: 1.4em; color: #3f7d00; }
+
+/* Historial */
+.cr-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+}
+.cr-fila small { display: block; color: #777; }
+.cr-fila.completa { border-color: #ffc800; background: #fffdf0; }

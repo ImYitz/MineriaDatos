@@ -9,6 +9,7 @@
     { archivo: "laboratorios.html", icono: "🧪", texto: "Laboratorios", tambien: ["laboratorio.html"] },
     { archivo: "aprende_r.html", icono: "💻", texto: "Aprende R", tambien: ["leccion_r.html"] },
     { archivo: "libre.html", icono: "📄", texto: "Modo libre" },
+    { archivo: "contrarreloj.html", icono: "⏱️", texto: "Contrarreloj" },
     { archivo: "logros.html", icono: "🏆", texto: "Logros" },
     { archivo: "avatar.html", icono: "🤖", texto: "Avatar" },
   ];
