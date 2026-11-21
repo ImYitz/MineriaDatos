@@ -1,4 +1,5 @@
 # Rutas del usuario: su perfil, su progreso y el cierre de una lección.
+from datetime import datetime
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func
@@ -7,6 +8,7 @@ from sqlalchemy.orm import Session
 from .. import modelos, esquemas, logica, servicio_logros
 from ..base_datos import obtener_sesion
 from ..dependencias import obtener_usuario_actual
+from ..modelos_repaso import ErrorEjercicio
 
 router = APIRouter(prefix="/api", tags=["progreso"])
 
@@ -16,6 +18,25 @@ class ResultadoLeccionCompleta(esquemas.ResultadoLeccion):
     aprobada: bool = True
     puntaje_minimo: int = logica.PUNTAJE_MINIMO_LECCION
     motivo_sin_recompensa: Optional[str] = None
+
+
+def _registrar_errores(bd: Session, usuario: modelos.Usuario, leccion: modelos.Leccion, enviadas: dict) -> None:
+    """Los ejercicios fallados entran (o vuelven) al repaso de errores, listos para repasar ya."""
+    ahora = datetime.now()
+    for ejercicio in leccion.ejercicios:
+        respuesta = enviadas.get(ejercicio.id)
+        if respuesta is None or logica.es_respuesta_correcta(respuesta, ejercicio.respuesta_correcta):
+            continue
+        fila = bd.get(ErrorEjercicio, (usuario.id, ejercicio.id))
+        if fila is None:
+            bd.add(ErrorEjercicio(usuario_id=usuario.id, ejercicio_id=ejercicio.id, caja=0, fallos=1,
+                                  dominado=False, proxima_revision=ahora, fecha_ultimo_fallo=ahora))
+        else:
+            fila.caja = 0
+            fila.fallos += 1
+            fila.dominado = False
+            fila.proxima_revision = ahora
+            fila.fecha_ultimo_fallo = ahora
 
 
 @router.get("/usuario/actual", response_model=esquemas.PerfilUsuario)
@@ -104,7 +125,10 @@ def completar_leccion(
     )
 
     # 3) Sin el mínimo de aciertos no se guarda ni se reparte nada
+    _registrar_errores(bd, usuario, leccion, enviadas)   # los fallos van al repaso aunque no se apruebe
+
     if puntaje < logica.PUNTAJE_MINIMO_LECCION:
+        bd.commit()
         return ResultadoLeccionCompleta(
             aciertos=aciertos,
             total=total,

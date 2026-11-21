@@ -5,12 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lección</title>
   <link rel="stylesheet" href="css/estilos.css?v=5">
+  <link rel="stylesheet" href="css/teoria.css?v=1">
   <link rel="stylesheet" href="css/menu_lateral.css?v=2">
 </head>
 <body>
   <main class="contenedor">
     <a href="index.html" class="volver">← Volver</a>
     <h1 id="titulo-leccion">Cargando...</h1>
+
+    <!-- Teoría breve: se muestra antes de los ejercicios (si la lección la tiene) -->
+    <div id="zona-teoria" class="oculto">
+      <h2>Antes de empezar</h2>
+      <div id="contenido-teoria"></div>
+      <button id="boton-empezar" class="boton" type="button">Empezar los ejercicios</button>
+    </div>
 
     <!-- Zona donde se muestran los ejercicios -->
     <div id="zona-ejercicio">
@@ -30,12 +38,13 @@
       <p id="resumen-monedas" class="resumen-monedas"></p>
       <p id="resumen-racha" class="texto-suave"></p>
       <div id="logros-nuevos"></div>
+      <a id="enlace-repaso" href="repaso.html" class="boton oculto">Repasar mis errores</a>
       <a href="index.html" class="boton">Volver a las lecciones</a>
     </div>
   </main>
 
   <script src="js/api.js?v=5"></script>
-  <script src="js/menu.js?v=1"></script>
-  <script src="js/leccion.js?v=5"></script>
+  <script src="js/menu.js?v=4"></script>
+  <script src="js/leccion.js?v=6"></script>
 </body>
 </html>

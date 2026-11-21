@@ -1,0 +1,16 @@
+/* Teoría breve antes de los ejercicios y pantalla de repaso. Se carga DESPUÉS de estilos.css. */
+.tarjeta-teoria-leccion {
+  background: #f7fbff;
+  border: 2px solid #b9d7ee;
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+}
+.tarjeta-teoria-leccion h3 { margin: 0 0 6px; color: #1478b0; }
+.tarjeta-teoria-leccion p { margin: 0; line-height: 1.55; }
+
+.repaso-resumen { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 14px 0; }
+.repaso-dato { background: white; border: 2px solid #e5e5e5; border-radius: 12px; padding: 10px; text-align: center; }
+.repaso-dato strong { display: block; font-size: 1.6rem; }
+.repaso-dato span { color: #777; font-size: 0.85rem; }
+.repaso-aviso { background: #f6fff0; border: 2px solid #b7e88a; color: #3f7d00; border-radius: 12px; padding: 10px 14px; font-weight: bold; }

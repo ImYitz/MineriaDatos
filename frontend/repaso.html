@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repaso de errores</title>
+  <link rel="stylesheet" href="css/estilos.css?v=5">
+  <link rel="stylesheet" href="css/teoria.css?v=1">
+  <link rel="stylesheet" href="css/menu_lateral.css?v=2">
+</head>
+<body>
+  <main class="contenedor">
+    <h1>🔁 Repaso de errores</h1>
+    <p class="texto-suave">Las preguntas que fallas en las lecciones vuelven aquí a intervalos cada vez más largos (1, 3 y 7 días). Con 4 aciertos seguidos, una pregunta queda dominada. El repaso no da XP: sirve para aprender.</p>
+
+    <section id="zona-resumen">
+      <div class="repaso-resumen">
+        <div class="repaso-dato"><strong id="rp-pendientes">-</strong><span>Toca repasar</span></div>
+        <div class="repaso-dato"><strong id="rp-en-repaso">-</strong><span>En repaso</span></div>
+        <div class="repaso-dato"><strong id="rp-dominados">-</strong><span>Dominadas</span></div>
+      </div>
+      <p id="rp-mensaje" class="repaso-aviso oculto"></p>
+      <p id="rp-error" class="mensaje-error"></p>
+      <button id="rp-comenzar" class="boton" type="button" disabled>Empezar el repaso</button>
+    </section>
+
+    <section id="zona-juego" class="oculto">
+      <div class="barra"><div id="rp-barra" class="barra-relleno"></div></div>
+      <h2 id="enunciado"></h2>
+      <div id="opciones"></div>
+      <p id="retroalimentacion" class="retroalimentacion"></p>
+      <button id="boton-principal" class="boton" type="button" disabled>Comprobar</button>
+    </section>
+
+    <section id="zona-final" class="oculto">
+      <h2>¡Repaso terminado!</h2>
+      <p id="rp-resultado"></p>
+      <p id="rp-dominadas-nuevas" class="resumen-monedas"></p>
+      <a href="repaso.html" class="boton">Ver mi repaso</a>
+    </section>
+  </main>
+
+  <script src="js/api.js?v=7"></script>
+  <script src="js/menu.js?v=4"></script>
+  <script src="js/repaso.js?v=1"></script>
+</body>
+</html>

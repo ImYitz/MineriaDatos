@@ -6,6 +6,7 @@
     { archivo: "perfil.html", icono: "👤", texto: "Mi perfil" },
     { archivo: "estudio.html", icono: "📊", texto: "Mis datos" },
     { archivo: "informes.html", icono: "📥", texto: "Informes PDF" },
+    { archivo: "repaso.html", icono: "🔁", texto: "Repaso" },
     { archivo: "laboratorios.html", icono: "🧪", texto: "Laboratorios", tambien: ["laboratorio.html"] },
     { archivo: "aprende_r.html", icono: "💻", texto: "Aprende R", tambien: ["leccion_r.html"] },
     { archivo: "libre.html", icono: "📄", texto: "Modo libre" },

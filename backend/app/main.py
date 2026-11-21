@@ -9,13 +9,14 @@ from . import modelos_laboratorios   # tabla de progreso en laboratorios (Etapa 
 from . import modelos_r              # tabla de progreso en lecciones de R (Etapa 7)
 from . import modelos_libre          # tabla de prácticas del modo libre (Etapa 8)
 from . import modelos_contrarreloj   # tabla de partidas del modo contrarreloj (Etapa 11)
+from . import modelos_repaso         # tabla del repaso de errores (Etapa 12)
 from .catalogo_logros import asegurar_logros
 from .catalogo_items import asegurar_items
 from .catalogo_lecciones import asegurar_lecciones
-from .rutas import contenido, progreso, autenticacion, logros, tienda, avatar, laboratorios, aprende_r, libre, estudio, informes, contrarreloj
+from .rutas import contenido, progreso, autenticacion, logros, tienda, avatar, laboratorios, aprende_r, libre, estudio, informes, contrarreloj, repaso, teoria
 
 # Crea las tablas que todavía no existan en MySQL
-# (en las Etapas 6, 7, 8 y 11 se crean "progreso_laboratorios", "progreso_r", "sesiones_libres" y "partidas_contrarreloj"; las demás ya existen y no se tocan)
+# (en las Etapas 6, 7, 8, 11 y 12 se crean "progreso_laboratorios", "progreso_r", "sesiones_libres", "partidas_contrarreloj" y "errores_ejercicio"; las demás ya existen y no se tocan)
 Base.metadata.create_all(bind=motor)
 
 # Carga (o actualiza) los catálogos de logros, objetos del avatar y lecciones
@@ -49,6 +50,8 @@ app.include_router(libre.router)
 app.include_router(estudio.router)   # panel "Mis datos de estudio" (Etapa 9)
 app.include_router(informes.router)  # informes en PDF (Etapa 10)
 app.include_router(contrarreloj.router)  # modo contrarreloj (Etapa 11)
+app.include_router(repaso.router)    # repaso de errores (Etapa 12)
+app.include_router(teoria.router)    # teoría breve antes de cada lección (Etapa 12)
 
 # ...y al final el frontend (debe ir último porque "/" atrapa todo lo demás).
 CARPETA_FRONTEND = Path(__file__).resolve().parent.parent.parent / "frontend"

@@ -24,10 +24,47 @@ async function iniciar() {
   try {
     leccion = await pedirApi("/api/lecciones/" + idLeccion);
     elTitulo.textContent = leccion.titulo;
-    mostrarEjercicio();
   } catch (error) {
     elEnunciado.textContent = "No se pudo cargar la lección.";
+    return;
   }
+
+  // Teoría breve antes de los ejercicios (si falla o no hay, se empieza directo por los ejercicios)
+  let secciones = [];
+  try {
+    const teoria = await pedirApi("/api/lecciones/" + idLeccion + "/teoria");
+    secciones = teoria.secciones || [];
+  } catch (error) { /* sin teoría */ }
+
+  if (secciones.length > 0) {
+    mostrarTeoria(secciones);
+  } else {
+    mostrarEjercicio();
+  }
+}
+
+function mostrarTeoria(secciones) {
+  const zonaTeoria = document.getElementById("zona-teoria");
+  const contenido = document.getElementById("contenido-teoria");
+  contenido.textContent = "";
+  for (const seccion of secciones) {
+    const tarjeta = document.createElement("div");
+    tarjeta.className = "tarjeta-teoria-leccion";
+    const titulo = document.createElement("h3");
+    titulo.textContent = seccion.titulo;
+    const texto = document.createElement("p");
+    texto.textContent = seccion.texto;
+    tarjeta.appendChild(titulo);
+    tarjeta.appendChild(texto);
+    contenido.appendChild(tarjeta);
+  }
+  document.getElementById("zona-ejercicio").classList.add("oculto");
+  zonaTeoria.classList.remove("oculto");
+  document.getElementById("boton-empezar").addEventListener("click", () => {
+    zonaTeoria.classList.add("oculto");
+    document.getElementById("zona-ejercicio").classList.remove("oculto");
+    mostrarEjercicio();
+  });
 }
 
 function mostrarEjercicio() {
@@ -146,6 +183,8 @@ function mostrarResultadoFinal(resultado) {
     " ejercicios (" + resultado.puntaje + "%).";
 
   const titulo = document.querySelector("#zona-final h2");
+  // Si falló algo, esas preguntas ya están en el repaso de errores
+  document.getElementById("enlace-repaso").classList.toggle("oculto", resultado.aciertos >= resultado.total);
   const elXp = document.getElementById("resumen-xp");
 
   // No alcanzó el mínimo de aciertos: no se guardó nada ni se repartió nada
