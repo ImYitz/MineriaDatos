@@ -145,11 +145,28 @@ function mostrarResultadoFinal(resultado) {
     "Acertaste " + resultado.aciertos + " de " + resultado.total +
     " ejercicios (" + resultado.puntaje + "%).";
 
+  const titulo = document.querySelector("#zona-final h2");
+  const elXp = document.getElementById("resumen-xp");
+
+  // No alcanzó el mínimo de aciertos: no se guardó nada ni se repartió nada
+  if (resultado.aprobada === false) {
+    titulo.textContent = "Casi lo logras";
+    elXp.textContent = resultado.motivo_sin_recompensa || "No alcanzaste el mínimo de aciertos.";
+    document.getElementById("mensaje-nivel").textContent = "";
+    document.getElementById("resumen-monedas").textContent = "";
+    document.getElementById("resumen-racha").textContent = "";
+    document.getElementById("logros-nuevos").innerHTML = "";
+    return;
+  }
+
+  titulo.textContent = "¡Lección terminada!";
   let textoXp = "+" + resultado.xp_ganada + " XP";
-  if (!resultado.es_primera_vez) {
+  if (resultado.motivo_sin_recompensa) {
+    textoXp += " — " + resultado.motivo_sin_recompensa;
+  } else if (!resultado.es_primera_vez) {
     textoXp += " (repetición: 30% de la XP)";
   }
-  document.getElementById("resumen-xp").textContent = textoXp;
+  elXp.textContent = textoXp;
 
   if (resultado.subio_de_nivel) {
     document.getElementById("mensaje-nivel").textContent =

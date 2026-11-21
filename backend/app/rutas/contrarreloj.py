@@ -3,6 +3,8 @@
 # Cómo se evita hacer trampa:
 #   - el servidor guarda la hora de inicio y rechaza respuestas fuera de tiempo,
 #   - las respuestas se envían una a una y en orden; la correcta solo se revela al responder,
+#   - una respuesta enviada demasiado rápido (menos de SEGUNDOS_MINIMOS_POR_PREGUNTA desde la anterior)
+#     se cuenta como incorrecta: ningún humano lee y responde una pregunta en ese tiempo,
 #   - XP y monedas dependen de los aciertos, con tope de partidas con recompensa al día.
 import random
 from datetime import datetime, time, timedelta
@@ -21,6 +23,7 @@ router = APIRouter(prefix="/api/contrarreloj", tags=["contrarreloj"])
 
 DURACION = 60                    # segundos de cada partida
 GRACIA = 3                       # segundos extra que se toleran por la demora de la red
+SEGUNDOS_MINIMOS_POR_PREGUNTA = 1.5   # el intervalo medido incluye la pausa de 0,3 s del navegador
 PREGUNTAS_POR_PARTIDA = 15       # si las responde todas dentro del tiempo, desbloquea el logro
 LIMITE_PARTIDAS_DIA = 30
 LIMITE_RECOMPENSAS_DIA = 5
@@ -142,6 +145,16 @@ def _buscar_partida(bd: Session, usuario: modelos.Usuario, partida_id: int) -> P
     return partida
 
 
+def _momento_anterior(partida: PartidaContrarreloj, respuestas: list) -> datetime:
+    """Cuándo se respondió la pregunta anterior (o cuándo empezó la partida, si es la primera)."""
+    if respuestas and respuestas[-1].get("t"):
+        try:
+            return datetime.fromisoformat(respuestas[-1]["t"])
+        except ValueError:
+            pass
+    return partida.fecha_inicio
+
+
 @router.post("/{partida_id}/responder", response_model=esquemas.ResultadoRespuesta)
 def responder(
     partida_id: int,
@@ -152,7 +165,8 @@ def responder(
     """Corrige una respuesta. Solo se acepta dentro del tiempo y en el orden de las preguntas."""
     partida = _buscar_partida(bd, usuario, partida_id)
 
-    if datetime.now() > partida.fecha_inicio + timedelta(seconds=DURACION + GRACIA):
+    ahora = datetime.now()
+    if ahora > partida.fecha_inicio + timedelta(seconds=DURACION + GRACIA):
         raise HTTPException(status_code=409, detail="Se acabó el tiempo")
     respuestas = list(partida.respuestas or [])
     if datos.pregunta_id != len(respuestas) or datos.pregunta_id >= len(partida.preguntas):
@@ -163,7 +177,12 @@ def responder(
         raise HTTPException(status_code=404, detail="Ejercicio no encontrado")
     correcta = logica.es_respuesta_correcta(datos.respuesta, ejercicio.respuesta_correcta)
 
-    respuestas.append({"ejercicio_id": ejercicio.id, "correcta": correcta})
+    # Demasiado rápido para haber leído la pregunta: no cuenta como acierto
+    segundos = (ahora - _momento_anterior(partida, respuestas)).total_seconds()
+    if segundos < SEGUNDOS_MINIMOS_POR_PREGUNTA:
+        correcta = False
+
+    respuestas.append({"ejercicio_id": ejercicio.id, "correcta": correcta, "t": ahora.isoformat()})
     partida.respuestas = respuestas          # se asigna una lista nueva para que SQLAlchemy detecte el cambio
     bd.commit()
 

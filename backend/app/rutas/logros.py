@@ -1,5 +1,5 @@
 # Ruta para consultar los logros del usuario.
-from typing import List
+from typing import Dict, List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -23,9 +23,15 @@ def listar_logros(
         )
     }
 
+    # Muchos logros comparten el mismo tipo de condición: se calcula una sola vez por tipo
+    # (antes se hacía una consulta por cada logro).
+    por_tipo: Dict[str, int] = {}
+
     resultado = []
     for logro in bd.query(modelos.Logro).order_by(modelos.Logro.id).all():
-        actual = servicio_logros.valor_actual(bd, usuario, logro.tipo_condicion)
+        if logro.tipo_condicion not in por_tipo:
+            por_tipo[logro.tipo_condicion] = servicio_logros.valor_actual(bd, usuario, logro.tipo_condicion)
+        actual = por_tipo[logro.tipo_condicion]
         resultado.append(
             esquemas.LogroEstado(
                 codigo=logro.codigo,

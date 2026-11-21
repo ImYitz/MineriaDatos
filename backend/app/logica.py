@@ -1,10 +1,11 @@
 # Reglas del juego (XP, niveles, monedas, rachas y corrección de respuestas).
 # Se dejan en un archivo aparte para que sea fácil cambiarlas en un solo lugar.
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta
 
 XP_POR_NIVEL = 20             # cada 20 XP se sube de nivel
 PORCENTAJE_REPETICION = 0.30  # al repetir una lección se gana el 30% de la XP y de las monedas
 MONEDAS_POR_ACIERTO = 2       # monedas por cada respuesta correcta (la primera vez)
+PUNTAJE_MINIMO_LECCION = 60   # % de aciertos para dar por completada una lección (y ganar recompensas)
 
 
 def calcular_nivel(xp_total: int) -> int:
@@ -38,6 +39,11 @@ def fecha_hoy() -> date:
     """La fecha de hoy según el reloj de la computadora donde corre el servidor.
     Está en una función aparte para poder simular otras fechas en las pruebas."""
     return date.today()
+
+
+def inicio_de_hoy() -> datetime:
+    """Las 00:00 de hoy (para contar lo que el usuario ya hizo hoy)."""
+    return datetime.combine(fecha_hoy(), time.min)
 
 
 def actualizar_racha(usuario, hoy: date) -> None:

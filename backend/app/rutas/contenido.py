@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from .. import modelos, esquemas, logica
 from ..base_datos import obtener_sesion
+from ..dependencias import obtener_usuario_actual
 
 router = APIRouter(prefix="/api", tags=["contenido"])
 
@@ -41,8 +42,10 @@ def responder_ejercicio(
     ejercicio_id: int,
     datos: esquemas.RespuestaEnviada,
     bd: Session = Depends(obtener_sesion),
+    usuario: modelos.Usuario = Depends(obtener_usuario_actual),
 ):
-    """Corrige la respuesta enviada por el estudiante."""
+    """Corrige la respuesta enviada por el estudiante.
+    Exige sesión: antes era pública y cualquiera podía recorrer los ids para obtener las respuestas."""
     ejercicio = bd.get(modelos.Ejercicio, ejercicio_id)
     if ejercicio is None:
         raise HTTPException(status_code=404, detail="Ejercicio no encontrado")
